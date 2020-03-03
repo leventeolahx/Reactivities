@@ -1,22 +1,17 @@
-import React, { SyntheticEvent } from 'react'
+import React, { useContext } from 'react'
 import { Item, Button, Label, Segment } from 'semantic-ui-react'
-import { IActivity } from '../../../app/modules/activity'
+import { observer } from 'mobx-react-lite'
+import ActivityStore from '../../../app/stores/activityStore'
 
-interface IPorps {
-    activities: IActivity[],
-    selectActivity: (id: string) => void,
-    deleteActivity: (e: SyntheticEvent<HTMLButtonElement>, id: string) => void;
-    submitting: boolean;
-    target: string;
-}
-
-const ActivityList: React.FC<IPorps> = ({
-    activities,
-    selectActivity,
-    deleteActivity,
-    submitting,
-    target,
-}) => {
+const ActivityList: React.FC = () => {
+    const activityStore = useContext(ActivityStore);
+    const { 
+        activitiesByData: activities, 
+        selectActivity,
+        deleteActivity,
+        submitting,
+        target, 
+    } = activityStore;
 
     return (
         <Segment clearing>
@@ -56,4 +51,4 @@ const ActivityList: React.FC<IPorps> = ({
     );
 }
 
-export default ActivityList
+export default observer(ActivityList);
