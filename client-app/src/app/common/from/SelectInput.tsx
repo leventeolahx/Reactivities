@@ -23,7 +23,7 @@ const SelectInput: React.FC<IProps> = ({
       />
       {touched && error && (
         <Label basic color="red">
-          error
+          {error}
         </Label>
       )}
     </Form.Field>
