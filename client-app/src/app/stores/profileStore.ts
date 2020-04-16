@@ -31,6 +31,24 @@ export default class ProfileStore {
         }
     }
 
+    @action updateProfile = async (profile: Partial<IProfile>) => {
+        try {
+            await agent.Profiles.update(profile);
+            runInAction(() => {
+
+                if (profile.displayName !== this.rootStore.userStore.user!.displayName) {
+                    this.rootStore.userStore.user!.displayName = profile.displayName!;    
+                }
+
+                this.profile = { ...this.profile!, ...profile };                
+            });
+            toast.info('Profile updated');
+        } catch (err) {
+            console.log(err);            
+            toast.error('Problem submitting data');
+        }
+    }
+
     @computed get isCurrentUser() {
         if (this.rootStore.userStore.user && this.profile) {
             return this.rootStore.userStore.user.username === this.profile.username;
