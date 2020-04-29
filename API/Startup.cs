@@ -58,13 +58,11 @@ namespace API
 
             services.AddSignalR();
 
-            services.AddMvc(opt =>
+            services.AddControllers(opt =>
             {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
-            });
-
-            services.AddControllers()
+            })
                 .AddFluentValidation(cfg =>
                 cfg.RegisterValidatorsFromAssemblyContaining<Create>()
             );
