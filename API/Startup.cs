@@ -1,4 +1,5 @@
 
+using System;
 using System.Text;
 using System.Threading.Tasks;
 using API.MiddleWare;
@@ -37,6 +38,30 @@ namespace API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(opt =>
+            {
+                opt.UseLazyLoadingProxies();
+                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(opt =>
+            {
+                opt.UseLazyLoadingProxies();
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+                // Use Sql if you want to use SQL Server
+                // opt.UseSql(Configuration.GetConnectionString("DefaultConnection"));
+            });
+
+            ConfigureServices(services);
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(opt =>
@@ -48,8 +73,12 @@ namespace API
             {
                 opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000")
-                    .AllowCredentials();
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithExposedHeaders("WWW-Authenticate")
+                        .WithOrigins("http://localhost:3000")
+                        .AllowCredentials();
                 });
             });
             services.AddMediatR(typeof(List.Handler).Assembly);
@@ -92,6 +121,8 @@ namespace API
                         IssuerSigningKey = key,
                         ValidateAudience = false,
                         ValidateIssuer = false,
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
                     };
                     opt.Events = new JwtBearerEvents
                     {
@@ -130,6 +161,9 @@ namespace API
 
             // app.UseHttpsRedirection();
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseRouting();
             app.UseCors("CorsPolicy");
 
@@ -140,6 +174,7 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
