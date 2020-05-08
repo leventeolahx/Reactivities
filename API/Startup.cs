@@ -43,7 +43,13 @@ namespace API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                // Console.WriteLine("ConfigureDevelopmentServices: " + Configuration.GetConnectionString("DefaultConnection"));
+                
+                // to enable sqlLite: add  "DefaultConnection": "Data source=reactivities.db" - to appsettings.Development.json
+                // delete all migrations and recreate it
+                //opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));       
+
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));       
             });
 
             ConfigureServices(services);
@@ -54,6 +60,7 @@ namespace API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
+                // Console.WriteLine("ConfigureProductionServices: " + Configuration.GetConnectionString("DefaultConnection"));
                 opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
                 // Use Sql if you want to use SQL Server
                 // opt.UseSql(Configuration.GetConnectionString("DefaultConnection"));
@@ -64,11 +71,6 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(opt =>
-            {
-                opt.UseLazyLoadingProxies();
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            });
             services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>
