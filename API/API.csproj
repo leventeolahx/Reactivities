@@ -1,16 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>5499e056-3108-4013-9f34-846ee036e7de</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Application\Application.csproj"/>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.0"/>
+    <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0"/>
   </ItemGroup>
 </Project>
