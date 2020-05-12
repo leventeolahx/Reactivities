@@ -61,7 +61,7 @@ namespace API
             services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
-                // // Console.WriteLine("ConfigureProductionServices: " + Configuration.GetConnectionString("DefaultConnection"));
+                // Console.WriteLine("ConfigureProductionServices: " + Configuration.GetConnectionString("DefaultConnection"));
                 // opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
                 // Use Sql if you want to use SQL Server
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
@@ -160,6 +160,10 @@ namespace API
             if (env.IsDevelopment())
             {
                 // app.UseDeveloperExceptionPage();
+            }
+            else 
+            {
+                app.UseHsts();
             }
 
 
