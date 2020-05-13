@@ -1,0 +1,76 @@
+Section 19: SignalR
+247. Section 19 Introduction
+- SignalR: add real-time web functionality to apps
+- Connected clients receive content instantly
+
+248. Adding the Comment entity
+- create comment entity, add virutal so lazy loading will load authomaically
+- dotnet ef migrations add "AddedCommentEntity" -p Persistence/ -s API/
+
+249. Adding the Comment DTO and mapping
+- create a new dto commentdto, use automapper to map comment to commentdto
+- create mapping profile in comments folder (application proj)
+
+250. Adding the Create comment handler
+- create a command handler for create comment
+- we need to parse Username in the command as we cannot use userAccessor here
+- signalR is using WebSocket instead of http. UserAccessor is accessable through httpcontext
+
+251. Adding a SignalR hub
+- services.AddSignalR(); - startUp.cs. This is gonna provide the routing
+- signalr is gonna act like an endpoint
+- endpoints.MapHub<ChatHub>("/chat"); - configure signalr endpoints in configure method
+- whenever a request come in the chat endpoint the program will redirect to the chatHub
+- Create SignalR folder in api and add chatHub c# file
+- chatHub inherit from Hub, bring mediator in the constructor
+- in signalr the name of the method is used in client app, in this case SendComment
+- our client invokes the SendComment, which then goes ahead and send our command to our mediator
+- the comment are saved to the db and returned from mediator handler
+- the comment is sent to all of the client which is connected to our hub
+
+252. Configuring Auth for SignalR
+- configure context for signalr. Add a new opt.Event to JwtBearer in startup.cs
+- we want to hook into the onMessageReceive
+- get the access token from the request Query
+- get the context path and check the access token and the path
+- set context.Token = accessToken - signalr has no auth param. the token is sent in access_token param and we need to set the token here
+
+253. Adding the SignalR hub connection to the client
+- npm install @microsoft/signalr
+- @observable.ref hubConnection: HubConnection | null = null;
+- @observable.ref - only gonna observe a reference to the object and don't observe all the properties
+- createHubConnection - action in activityStore
+- this.hubConnection = new HubConnectionBuilder() - initialize on the chat endpoint
+- withUrl('http://localhost:5000/chat') - we need to parse some options, like the access token, access_token will be sent as a query param
+- we need to send the access token like this, as in a normal http request we send it in the header, but signalr does not use http, it uses webs
+- configure logging and build the connection
+- this.hubConnection.start() - start the hub connection
+- this.hubConnection.on('ReceiveComment', comment => {});  - this is invoked when the ReceiveComment is invoked
+- ReceiveComment - we defined it earlier in the backend when call Clients.All.Send
+- Add stopHubConnection action with this.hubConnection!.stop();
+
+254. Connecting to the SignalR hub from our client
+- create addComment action with await this.hubConnection.invoke("SendComment", values) - invoke a method with a specific name on the server
+- Invoke('SendComment') - need to match with the name of the method that is in the chatHub
+- ActivityDetailedChat: in use effect  createHubConnection and stopHubConnection
+- we need to add .AllowCredentials() to CorsPolicy in StartUp.cs
+
+255. Adding the Comment functionality to the client
+- create a final form in activitydetailedChat.tsx
+
+256. Formatting Dates in words using Date-FNS
+- {formatDistance(comment.createdAt, new Date())
+
+257. Using SignalR Groups in the API
+- Add addToGroup and RemoveFromGroup ChatHub methods. Also change Clients.All to Clients.Group(activityId). 
+- When a user open the activty we invoke AddToGroup. When leaves it we invoke RemoveFromgroup
+
+258. Using SignalR Groups in the client
+- this.hubConnection!.invoke('AddToGroup', activityId) - invoke when the hubconnection is started
+- this.hubConnection.on('Send', message => {}) - invoke a new method to show toast when a user enters the activity/ chat
+- this.hubConnection!.invoke('RemoveFromGrouop', this.activity!.id) - onStopConnection. In Then chain method stop the connection after the user is removed
+
+259. Section 19 summary
+- What is SignalR?
+-ASPNET Core SignalR
+- @aspnet/signalr

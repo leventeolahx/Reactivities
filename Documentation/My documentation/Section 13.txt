@@ -1,0 +1,84 @@
+Section 13: Client side login and register
+175. Section 13 introduction
+
+176. Creating the Typescript interfaces and Axios methods
+- create user.ts file with IUser and IUserFormValues
+- extend agent.ts with User requests
+
+177. Creating a Mobx user store
+- create a userStore.ts
+- create the UserStore using mobx and add loginaction
+- there could be occasions when we want to access a store within another store, we can resolve this by creating a root store
+- root store act as a kind of in-between store for activity store and user store
+- so from activity store we would be able to access use store via root store
+
+178. Creating a MobX root store
+- remove export default createContext(new ActivityStore()); from activity store
+- create rootStore.ts
+- create a constructor insde rootstore and initialize the activitystore and userstore
+- export const RootStoreContext = createContext(new RootStore());
+- create a new constructor in user store with param root store and assign the rootstore constructor param  to class param
+- refactore and use:  const rootStore = useContext(RootStoreContext); everywhere
+
+179. Creating the Login form
+- add LoginForm.tsx
+- use previously learned react final form 
+- add to the app.tsx:<Route path='/login' component={LoginForm} />
+
+180. Hooking up the Login form to the API
+- use rootstore in login.tsx and add login method to the final form
+- move configure({ enforceActions: 'always' }); to rootstore
+- whenever we are setting an observable after an async fucntion we have to wrap it into runInAction method !!!
+- added validation and disabled the button
+
+181. Dealing with submission errors
+- JSON.stringify(form.getState(), null, 2)
+- [FORM_ERROR]: error - import it from final form error 
+- when something is in the FORM_ERROR then the form.submission error becomes true so we can display the error
+- {submitError && <Label color='red' basic content={submitError.statusText} />}
+
+182. Adding home page and NavBar user information
+- we have adj the homep to show the login button or the act button depending on the use is logged in or not. the user is shown in nav bar
+
+183. Creating a MobX common store
+- create a new store common store which contain feature that are not specifically to do with user or activities
+- save the token to the browser localstorage: window.localStorage.setItem('jwt', token) inisde commonStore;
+- this.rootStore.commonStore.setToken(user.token); after the user logged in (userStore)
+- add logout method to userStore
+
+184. Using Axios request interceptor to automatically send the JWT token
+- add a new request interception for axios, get the token from localstorage and assign it the the confi.headers.authorization
+
+185. Persisting login on refresh
+- there are 2 different type of reactions: 
+ 1. autorun: when our store initialize is it's automatically going to run this reaction, it;s going to run every singe time the token is changed
+ 2? running only once, when the store is initialized
+- reaction() in constructor - add/remove token to/ from localstorage
+- add a get user to the user store to get current user
+- add a useEffect to the app.tsx and get user if there is token
+
+186. Adding Modals to our application
+- use modal from https://react.semantic-ui.com/modules/modal/#types-modal
+- create to common folder: ModalContainer.tsx
+- create a new store only for modals
+- <ModalContainer /> - very high in the app, so add it to the app.tsx
+- update the login button to open the modal
+- @observable.shallow - means that it's not gonna observe deeply only on the first level, so if we add a cmp only the first level is observed
+
+187. Adding better error messages to our form
+- we are implementing: https://react.semantic-ui.com/collections/message/
+- Create a new ErrorMessage.tsx
+
+188. Adding a Register form
+- Create register form.tsx
+- Same as login form
+
+189. Displaying server validation errors in our form
+- we are going to get the text from the api response errors and flatten them
+- Extend ErrorMessage.tsx to support list of error messages using error.data.errors
+
+190. Summary of section 13
+- add response interception to axios
+- adding root store
+- submission errors
+- modals

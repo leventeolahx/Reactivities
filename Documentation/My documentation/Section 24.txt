@@ -1,0 +1,62 @@
+Section 24: Bonus - Identity Cookbook
+310. Intro to the bonus section
+- user hits the button, makes a call to fb, fb returns a token, user send that token to the api, api validate the token at fb
+- fb send back a token
+
+311. FB Login - Setting up the app in Facebook
+- developers.facefook.com
+- create an app
+
+312. FB Login - Creating a new Git branch to work from
+- git clone
+- git pull
+- git checkout -b socialLogin
+- git branch -a
+- git push origin socialLogin
+- dotnet user-secrets list
+- dotnet watch run on api
+- cd client app and npm install
+
+313. FB Login - Adding a Facebook login button to the client app
+- npm install react-facebook-login @types/react-facebook-login
+- add fbLogin to agent.ts
+- add fbLogin action to userStore
+- add SocialLogin.tsx to feature/user. call this cmp in loginForm
+- include import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+- create typing file for: facebook-login-render-this.props
+- use FacebookLogin from library. define props and button
+- create 2 test users on fb developer for the app
+
+314. FB Login - Adding the API configuration to user secrets
+- dotnet user-secrets set Authentication:Facebook:AppId 1057157864684261
+- Add FacebookAppSettings.cs to infrastructure/security
+- add to startup: services.Configure<FacebookAppSettings>(Configuration.GetSection("Authentication:Facebook"));
+
+315. FB Login - Adding a facebook accessor service to the infrastructure project
+- create IFacebookAccessor to application interfaces folder
+- add FacebookLogin method
+- Generate FacebookUserInfo class
+- Create facebookAccessor in infrastructure proj
+- we need access for http client provided by dotnet core: private readonly HttpClient _httpClient;
+- bring IOptions<FacebookAppSettings> config in the constructor. dependency injection will bring in the settings as we added to startup
+- configure _httpClient with header and uri (graph.facebook)
+- inside FacebookLogin verifiyToken using _httpClient and my fb app credentials
+- Generate generic GetAsync method 
+- private async Task<T> GetAsync<T>(string accessToken, string endpoint, string args)
+- request the client with _httpClient
+- if error: return default(T);
+- var result = await response.Content.ReadAsStringAsync();
+- we add all the services to the services container: services.AddScoped<IFacebookAccessor, FacebookAccessor>(); - startup
+
+316. FB Login - Adding the Facebook login handler
+- Add ExternalLogin login handler to app proj user's folder
+- instantiate photos in appUser constructor: Photos = new Collection<Photo>();
+- inside handle method: call FacebookLogin (validate and returns the user), get user by email from _usermanager. Create user in db if case
+- return User: generate jwt tokent
+
+317. FB Login - Adding the API Controller method and tying it together with the clien
+- create FacebookLogin api method
+- Extend fbLogin in userStore to call the api
+- userStore:fbLogin -> update commonStore's token. and close the modal
+
+318. FB Login - Adding loading indicator and merging changes with master branch

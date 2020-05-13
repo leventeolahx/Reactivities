@@ -1,0 +1,5 @@
+Section 18
+245.  Challange introduction
+
+256. Challange solution
+- Use Partial<IProfile> in agent.ts

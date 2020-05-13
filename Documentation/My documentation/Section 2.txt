@@ -1,0 +1,135 @@
+Section 2: Walking Skeleton
+5.
+- Walking Skeleton: a tiny implementation of the system that performs a small end-to-end function. It should link together the main architectural cpms.
+- application architecture for walking skeleton: domain ->application -> api-> persistence (db access)
+
+6. Crating the solution and projects using dotnet CLI (Command-line interface)
+- Create dotne project from console. For that open containg folder
+   - dotnet new sln -> creates solution file
+       - dir -> check folder's files
+   - dotnet new classlib -n Domain
+       - cd.. (move up a folder in hierarchy)
+   - dotnet new classlib -n Application
+   - dotnet new classlib -n Persistence
+   - dotnet new webapi -n API
+
+7. Creating the projectreferences using the DotNet CLI
+- dotnet sln add Domain/
+- repeat for all the projects
+- dotnet sln list (check solutions projects)
+
+- Add references to Application
+  - Open Application folder (cd Application)
+  - dotnet add reference ../Domain/
+  - dotnet add reference ../Persistence/
+- Add refercen to API
+  - change dir
+  - dotnet add reference ../Application/
+  - Because Application project has a reference to Domain project our API project is going to have a transitive dependency on the Domain. Only need to specify our Application as reference to our API project
+- Add refercen to Persistence
+  - dotnet add reference ../Domain/
+
+Open project inside vs code
+ - type 'code .' inside reactivities
+ - required assets to build and debug are missing..: Yes 
+
+8. Reviewing the Project files
+- At this point all .csproj file have targetFramework and ProjectReference nodes
+- Microsoft typically recommend is you start with the lowest version of the framework you can target for the maximum compatibility
+- Hide obj and bin: File -> Preferences -> Settings. Search for exclude. Add **/obj and **/bin. These folder will not be shown on any project.
+- API target reference is netcoreapp3.0. We need to change the other projects target reference as well later
+- Entity Framework code 3.0 uses other framework
+- Dot net core some dependencies were removed from Microsoft.NET.Sdk.Web and we have to add them manually
+
+API explained: 
+- Program.cs ->Main(); -> application starts here
+- CreateHostBuilder -> configure app
+- UseStartup class for additinonal configuration (we can access various application configurations)
+- app.UseHttpsRedirection(); - comment it out for now
+- Remove https://localhost:5001; from properties/launchSettings -> API
+
+9. Run the application
+- dotnet run -p API/
+- open localhost:5000/api/values in browser
+
+10. Creating a Domain entity
+- need to create a class that derives from our DBContext class that we get from entity framework
+
+11. Creating dataContext and service
+- Create dataContetext class
+- Ctrl + . to open intelisence
+- open command shell: ctrl + shift + p
+- search for nuget package manager -> add package
+- Add microsoft.entityframework.core and core.sqllite packages
+- The project uses netstandard2.0 but we have installed entity framework core 3.0 so we need to update the project in csprojfiles
+- when we update one class library to a higher version we should update the other ones as well
+- dotnet restore
+
+- ctor command to create the constructor of a class
+- prop command to create property on class
+- Open startup in api and add DataContext with connection string
+- Specify connection string in appsettings.json
+
+12. Adding our first EntityFramework code first migration
+- cd API
+- dotnet tool install --global dotnet-ef --version 3.0.0
+- cd.. (to base folder)
+- dotnet ef migrations add InitialCreate -p Persistence/ -s API/
+- install Microsoft.EntityFrameworkCore.Design from nuget (ctrl + c + p, >nuget, and type Microsoft.EntityFrameworkCore.Design)
+
+13. Creating the database
+- open terminal ctrl+shift+`
+- clear (in terminal clears it)
+- cd API/
+- dotnet watch run- only works inside the of the startup project. We will get and error if we use it at the solution level, even with the -p switch
+- ctrl+c+p, type > sqllite: open database, choose db
+
+14. Seeding data using EntitFramework fluent cofiguration
+- Use OnModelCreating method in DataContext class to insert data
+- Stop api server (ctrl+c)
+- cd .. (base)
+ - dotnet ef migrations add SeedValues -p Persistence/ -s API/
+- cd api
+- dotnet watch run
+
+14. Seeding data using EntitFramework fluent cofiguration
+- Use OnModelCreating method in DataContext class to insert data
+- Stop api server (ctrl+c)
+- cd .. (base)
+ - dotnet ef migrations add SeedValues -p Persistence/ -s API/
+-cd api
+- dotnet watch run
+
+15. Using Dependency Injection
+- generate controller constructor with dataContext
+- add basic contorller method which connect to db
+
+16. Inroduction to Postman
+-run project dotnet watch run
+-query api/values
+-add collections to posman to reuse queries (file -> import -> add file)
+
+17. Saving our changes into Source control using Git
+- download and install git: git-scm.com
+- inside of the solution folder : git status
+-git init
+-exclude bin and object folders:
+  - create .gitignore file in soluction level
+  - add the following: bin obj .vscode appsettings.json *.db
+
+- configure git for this folder:
+   - git config user.name "name"
+   - git config user.email "email"
+- add to git: first need to be staged: 
+   - git add.
+- git commit -m "Initial Commit"
+- open github and create a new repository
+- git remote add origin https://github.com/leventeolahx/Reactivities.git
+- git push -u origin master
+
+18. Secton 2 summary
+- clean Architecture - Robert Martin
+
+
+
+

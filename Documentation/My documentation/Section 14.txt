@@ -1,0 +1,71 @@
+Section 14: Entity Framework Core Relationships
+191. Section 14 introduction
+
+192. Adding a class to join our Users and Activities
+- add userActivity.cs to domain
+- public ICollection<UserActivity> UserActivities { get; set; } - to appUser and activity class
+- Define primary key: builder.Entity<UserActivity>(x => x.HasKey(ua => new { ua.AppUserId, ua.ActivityId }));
+- builder.Entity<UserActivity>().HasOne(u => u.AppUser).WithMany(a => a.UserActivities).HasForeignKey(u => u.AppUserId);
+- add many to many relation ship using builder.entity for userActivities
+- dotnet ef migrations add "UserActivityAdded" -p Persistence/ -s API/
+
+193. Updating the Create Activity handler
+- In create handler inject IUserAccessor so we van have the username. Create a new user activity and assign it to the activity.
+
+194. Testing in Postman
+- we can set global variables in postman: pm.globals.set('token', user.token); - in the test tab. and you can see the vars in globals(gear ic)
+- use the global variables set previously by: Bearer {{token}}
+- use prerequest scripts in postman: var moment = require("moment");
+pm.environment.set('activityDate', moment().add(14, 'days').toISOString()
+
+195. Loading related data using Eager loading
+- Eager loading is done by Include, ThenInclude
+
+196. Adding DTOs to shape our data
+- added DTO's for activity and activity Users
+
+197. Adding AutoMapper
+- automapper.org
+- we are using the dependency injection version made for dot net core
+- install AutoMapper.Extensions.Microsoft.Dependencyinjection from nuget to appliction proj
+- Add services.AddAutoMapper(typeof(List.Handler)); - to startup
+
+198. Adding AutoMapper profiles
+- Create a MappingProfile which derives From AutoMapper.Profile
+- use IMapper mapper via dependency injection
+- use:  _mapper.Map<Activity, ActivityDto>(activity);
+- use: [JsonPropertyName("attendees")] - for mapping data
+
+199. Configuring AutoMapper mappings
+- use: .ForMember(d => d.Useranme, o => o.MapFrom(s => s.AppUser.UserName))
+
+200. Using Lazy Loading to load related data
+- add from nuget Microsoft.EntityFrameworkCore.Proxies for proj Persisictence, use the same version as entityFrameworkCore
+- use: opt.UseLazyLoadingProxies(); in startup inisde AddDbContext
+- virtual keyword is used for LazyLoading
+
+201. Adding the Join activity feature
+- Create an Attend.cs class for attend handler
+- Create handler to attend a user to an activity
+- create a new api endpoint for attend
+
+202. Adding the remove attendance feature
+- use the same structure for unattend as we used for attend
+
+203. Creating a custom Auth policy
+- create IsHostRequirement and IsHostRequirementHandler in Infrastructure proj
+- in IsHostRequirementHandler - we get the currentuserName, then get the activity id from route and finally check the current user for ishost
+- add authorization policy for isHost to startUp.cs: policy.Requirements.Add(new IsHostRequirement());
+- addTrasient is only available on the lifetime of the operation not the request
+- services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>(); - add the handler to the startup
+- user the previously addedd services in the contorller as attribute: [Authorize(Policy = "IsActivityHost")]
+- set different token in postmen (tom-token)
+
+204. Updating our Seed data
+- dotnet ef database drop -p Persistence/ -s api/
+
+205. Section 14 summary
+- ef relationships
+- dto's
+- automapper
+- Eager / Lazy Loading related data

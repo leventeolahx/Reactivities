@@ -1,0 +1,101 @@
+Section 5: Building a CRUD application in REACT
+49. Section 5  Introduction
+
+50. Introduction to React Hooks
+- react was built in 2013. in that time there was no class in javascript so react class was a function that has certain method in it
+- 2015 react used javascript classes
+- why hooks?: - with class cmp it's hard to reuse statefull login between cmps.
+- complex cmps become hard to understand
+- classes confuse people and hooks use react features without classes
+
+51. Folder structure in React
+- preference is to group by feature
+- we create 2 folders: app (for app files) and feature (for features like activities)
+- move app.tsx and style.cs to layout
+
+52. Getting a list of activities from the API
+- change value api to activity api
+
+53. Adding an Activity interface in Typescript
+- create activity interface in app/module folder
+- an interface is a structure solely for type checking
+- interface is not gonna transport into javascript
+- it's good if we set the state to read only
+
+54. Refactoring our class cmp to use React Hook
+- state hook and effect hook
+- useState<IActivity[]>([])
+- useEffect with [] as dependency will run one time only
+- every time when the component renders the useEffect would be called. That's why we add dependencies
+- use effect is three react life-cycle method rolled up 
+- component did mount (first load), component did update (using dependencies), component did un-mount (using return)
+- add properties as dependencies to useEffect
+- component did un-mount is for clean up
+
+55. Adding the Navigation bar
+- rfce - create a react functional cmp
+- google semantic ui react page and get a menu example (e.g.inverted) and add it to the feature/nav folder
+- Add a container and move all menu item in it
+- there is a public folder in the client-app. This will not e modified or changed in any way, it's simple copied across when we build or app
+
+56. Styling React cmps
+- use camel case naming for styles
+- remove everything from style css
+- JSX does not allow to return siblings, only a single element
+- Use React.Fragment when you don't want to add style to the wrapper
+- React.Fragment will not add an extra div to the page
+
+57. Adding the Activity Dashboard
+- move the activity list from app.tsx to a separate cmp and call it in the app.tsx.
+- change function ActivityDashboard to const ActivityDashboard: React.FC<IProps> = (props) => {};
+
+58. Creating the activity list
+- copy Item from sematic ui Views -> Item
+- Create the item and wrap it into a segment
+
+59. Adding the Activity Details
+- in order to make the buttons fill all space in a button group we need to add a width for the button group
+
+60. Adding the Activity Form
+- We are using the Form field and Input field from semantic ui
+
+61. Selecting an individual activity
+- when we click on the view button in the list we are going to store the item in the state and then parse it to the detail cmp
+- at the moment we store the item in the app level in the state to have access in all the other cmps
+- created a handler method for selected activities which we going to parse down to the cmps
+- you can use $ sign in the string (frontend) like: `assets/${activity.category}.jpg`
+- selectedActivity={selectedActivity!} - tells typescript that the param is IActivity | null
+
+62. Adding an individual Activity
+
+63. Adding a create Activity mode
+- Semantic clearing
+
+64. Initializing the form with data
+- you can initialize a state with a function that returns an object
+- activity: initialFormState - this way you can add an other name to it. it's like an as in sql
+
+65. Controlled components in React
+- when we type to an input field we don't modify the actual dom directly but react work with the virtual dom
+- we need to tell react about the changes of this input field inside the states
+- we need to add a onChange event to all of the fields
+- setActivity({ ...activity, title: event.target.value }); - we spread the property and only update the title
+- (event: FormEvent<HTMLInputElement | HTMLTextAreaElement>
+
+66. Handling fom submission
+- setActivities([...activities, activity]); - spread activities and add a new one to it
+- setActivities([...activities.filter(a => a.id !== activity.id), activity]); - quick way to update an activity in a list
+- npm install uuid - for guid in typescript
+- npm install @types/uuid - install this one as well
+- use guid from - import { v4 as uuid } from 'uuid';
+
+67. Fixing issues with the dates in the from
+- the component has not been unmounted and simply changing the prop has not caused rebound of this cmp to give it its updated state
+- we can give our activity form a key to resolve the update
+- and when we give our activity form a key and the key changes and this will cause our cmp to reinitialize and that will update the state
+- key={selectedActivity && selectedActivity.id || 0}
+
+68. Adding the delete functionality
+- same as edit and create except that we pass our handler method to the list cmp
+
+69. Summary sof section 5

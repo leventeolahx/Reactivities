@@ -1,0 +1,62 @@
+Section 7: MobX
+79. Section 7 introduction
+
+80. Introduction to Mobx
+- mobx api is pretty small, we are going to use only for method: observable, action, computed, reaction
+- the observer, we are going to get this from a separate package, from mobX react light
+- observer provides a higher order component and we can use this higher order component to make our React Components observers of our store and whenever that component is an observer of a store.
+- react context is a place that any of our cmps have got access to 
+
+81. Setting up a MobX store
+- npm install mobx mobx-react-lite
+- create a new folder stores in app folder
+- create a new ActivityStore class
+- enable experimental support in typescipt, in tsconfig add experimentalDecorators: true
+- createContenxt with a new instance of the class
+
+82. Refactoring the activity list to use the store
+- if we want to use in react cmp fields which are mobx observables we need to make the react cmp as observer
+- observer is a higher order cmp and takes the cmp as a partameter
+
+83. Refactoring the select acivity function
+- we have made the activityDashboard as an observer then move the selectedActivity and selectActivity to the activity store. Also refactor it
+
+84. Usin Async Await in our methods
+-  .catch(error => console.log(error)) - for rejections
+- when using promis chaining, the then method is resolved when the promise is fulfiled
+- the code inside the then method is only going to be executed when the request is fulfiled
+- when we use await we block the execution of code that is below until the code is fulfiled
+
+85. Refactoring the create activity method
+- we have refactored the create activity the same way as we did with the other one
+
+86. MobX computed properties
+- @computed get activitiesByData() {}
+- return this.activities.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+
+87. Using an ObservableMap
+- @observable activityRegistry = new Map(); - it's like a dictionary in C#
+
+88. Adding the edit activiy action
+- same as create activity with mobx
+
+89. Addng the delete activity action
+- same refator
+
+90. Cleaning up our code
+- remove unnessecary code
+
+91. Enabling MobX strict mode
+- mobx advice is to move all code inside an action which mutates states
+- action decorator is only affects the currently running function
+- it's not going to have affect on the code inside the .then method or the code after the await
+- configure({ enforceActions: 'always' });
+- we need to refactor our code to wrap the code inside actions
+- wrap the code inside a runInAction method, which is provided by mobx
+- refactor all the code code with action decorator to use runInAction
+
+92. Adding MobX dev tools
+- https://chrome.google.com/webstore/detail/mobx-developer-tools/pfgnfdagidkfgccljigdamigbcnndkod/related
+
+93. Summary of section 7
+- you can use mobx without decoratios, the a you would have used a normal class then add all the methods to the decorator function

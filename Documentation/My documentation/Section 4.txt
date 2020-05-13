@@ -1,0 +1,79 @@
+Secton 4 - Building a CRUD application in .Net Core using the CQRS + Mediator pattern
+35.Section 4 introduction
+
+36. Adding the Activity entity
+- add a dbSet<Activity> to DataContext
+- dotnet ef migrations add "ActivityEntityAdded" -p Persistence/ -s API/   (-p -> datacontext project, -s -> startproject)
+- id is primary key by default
+- sql light has no support for Guid -> stores the guid in blob and EF will take care of the conversion
+
+37. Seeding Activity data
+- create a seed class to persitence project
+- .code-snippet file has already written code snippets. you can use it by adding to the project and typing e.g. S_3_3
+
+38. Command and Queries - CQRS
+- command and queries can be done with single db or with a read db and write db
+- CQRS with event store
+- CQRS youtu.be/JHGkaShoyNs
+
+39. Intrudoction to MediatoR
+- entities are the domain project, use cases are the the application project, controllers are the API proj, and web ui is the client app proj
+- inner circles know nothing about outter circles. eg. entities know nothing abut use cases
+- Mediator is going to give us a way to interact with out app project from our api proj
+- and allow our app project to return an object to our api which it can send to the client
+
+40. Creating our first Query handler
+- add mediator package from nuget
+- to can send requests from api controllers to application project
+- install MediatR.Extensons.Microsoft.Dependencies to application project
+- Create folders for each functionality in application proj
+Creating the first query:
+- Create a class which inherits from IRequest (it's a mediatr interface)
+- We need to create a handler, which inherits from IRequestHandler (mediatr interface)
+- Implement interface in the handler
+- We are going to inject datacontext to the handler, by generating a consturctor for the handler with a datacontext prop
+- For now all the logic will be done inside thse handlers, and api will be quite dumb
+- Initialize private readonly field for context
+
+41. Creating the Activities API Contorller
+- inject mediator to api contorller via constructor (IMediator mediator)
+- return await _mediator.Send(new List.Query()); -this is ow to call mediator 
+- add this to startup.cs to configureservices: services.AddMediatR(typeof(List.Handler).Assembly);
+- we will have lots of handlers but we only need o tell medato about one and then it's going to use that particular reference to look inside this assambly to lacate all of the other handlers
+- in postman you can use variabiles in the request like {{url}}/api/activities 
+- you can edit the variables in for the collections: by clicking on the edit of collection then select varables tab
+
+42. Adding the Details Handler
+- same as list, but with and extra id in the Query class
+
+43. Cancellation Tokens
+- with $ in front of the "" you can use valiables in {}
+- you can add cancellation token to the api methods as param
+
+44. Adding a Create handler
+- Command is a post/put handler and now we are not gonna send back any object to the frontend
+- Unit is an empty object and when the api request gets that empty object it gonna return the 200 ok response
+- our new activity is sent up in the body of the request
+- if we don't use the apiController attribute then we would need to specify the FromBody attribute
+- in postman you can use {{guid}} in the body and postman will create a guid automatically 
+- you can add pre-requests scripts to postmen request, like setting a variable with date
+- var moment = require("moment"); pm.environment.set('activityDate', moment().add(14, 'days').toISOString());
+
+45. Dealing with boilerplate code in or handlers
+- user -> preferences -> user presets - new snippet file
+- search for snippet generator in google: https://snippet-generator.app/
+- copy the snippet to the cod-snipet file
+
+46. Adding an Edit handler
+- type chandler - the one command that we created in the previous lecture
+
+47. Addinga Delet handler
+-  create delete the same way as edit
+- clean up code and commit
+
+48. Summary of section 4
+- crud
+- thin api controllers
+- seedig more data (create a seed class with a static seed method and call it from program.cs ->CreateHostBuilder)
+- mediatR
+- CQRS + MediatR pattern

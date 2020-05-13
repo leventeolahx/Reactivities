@@ -1,0 +1,62 @@
+Section 21: Paging, Sorting and Filtering
+274. Section 21 introduction
+
+275. Paging our Activity list
+- create a new nested class inside ActivityList: ActivitiesEnvelope
+- add limit and offset to Query class
+- add queryable to handle method and user limit and offset
+- return ActivitiesEnvelope in handle method
+- adjust acticvity api list endpoint
+
+276. Refactoring the Activity store list method for paging
+- add totalPages computed method
+- add setPage action method to activityStore
+- extend agent.ts activitis list method with page and limit params
+- add limit and page to loadactivities to activity store
+- add IActivitiesEnvelope interface
+- update activities and activityCount from activitiesEnvelope
+
+277. Adding vertical paging to our activity dashboard
+- add loading next const to activity dashboard for loading button  indicator
+- add handleGetNext method to set the next page and get the next activities from server
+- add a button and disable it when there is no more pages
+
+278. Adding infinite scrolling to our activity dashboard
+- npm install react-infinite-scroller
+- add typings
+- Add InfiniteScroll to activityDashboard
+
+279. Updating the dashboard with Filter component
+- add activityFilters.tsx to dashboard folder
+
+280. Filtering our Activity List in the API
+- add the filter params to the activity list query
+- adjust activities list handler
+
+281. Adding the Filtering methods in the client
+- @observable predicate = new Map(); - to activityStore
+- add setPredicate action to activityStore
+- URLSearchParams - it's an interface that defines methods to work with query string of a url
+- add axiosParams computed method and use URLSearchParams inside 
+- define all param inside this method
+- add this.axiosParams to loadActivities
+- in agent.ts use axios directly instead of request. add params as {params: params}
+- add a new reaction to the constructor to check the predicate.keys(), load activities and set data back to default when this changes
+
+282. Updating the Activity Filters UI to allow filtering
+- add predicates and handlers to ActivityFilter items
+
+283. Adding User Activities filter in the API
+- create a new UserActivityDto to proflie folder in app project
+- also add ListActivities to the same folder
+- add GetUserActivites api endpoint
+
+284. Adding User Activities filter in the client
+- adjust agent.ts
+- Create a new interface IUserActivity
+- add @observable userActivities: IUserActivity[] = []; to profile store
+- add loadUserActivities action method to profile store
+- add ProfileActivities.tsx to features/profiles
+- use ProfileActivities in profileController
+
+285. Summary of section 21

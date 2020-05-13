@@ -1,0 +1,92 @@
+Section 10: Error handling and validation
+120. Section 10 introduction
+
+121. Introduction to validation in the API
+- One way to implement validation to introduce data annotations
+- Other way for validation is to use fluent validation
+- Fluent validation is a package
+
+122. Adding validation in the Api using Data Annotations
+- launch.json .NET Core Attach - for debugging the api
+- debug tab in vs code -> select .net code attach
+- run the debug by clicking on the green button and select the api.exe or dll
+- validations are stored in the ModaState while debugging
+- fluent validation acts as a middleware between our command and the handler
+
+123. Adding validation in the Api using Fluent Validation
+- quite common practice to use fluent validation when using MediatR
+- Add FluentValidation.AspNetCore to application project
+- add netcoreapp3.0 for all projects to can use fluent validation, because that package uses netcode app3
+- dotnet restore
+- public class CommandValidation : AbstractValidator<Command> class and create a consturctor. There you can add RuleFor
+-.AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>() - add this line to the startup project after addcontollers
+- we only need to specify one particular class because this method is goning to look for any validators and register them in our services
+
+143. Error handling concepts in our application
+- 2xx - ok, 3xx - not modified/ redirected, 4xx - client side error, 5xx - server side error
+- we have no access to the httpresponse in the application project
+- this case the only way to get out of a request from the application project to the api is to throw an exception with proper message
+- to have access to httpcontext and one way  to access this context is to create a exception handling middleware
+- ordering of middelware is important as aspcore executes the middlewares in the pipeline one after another
+- when it comes to exception handling we need to call it early in the pipeline so that we can catch exceptions that occur in later stages of the pipeline
+
+125. Error handling strategy
+- in the value controller we can return Notfound cause we are inside of an APIController
+- there is two schools of thought on how to handler errors from MediatR handler
+- one of them is to always return back a result object to the a API Controller and in that result obj we can include the error
+- exceptions are a bit more expensive
+- the other on is to use exception and stop the execution of the handler
+- and we are going to intercept the exception and turn that into an http response
+
+126. Creating a derivied Exception class for Rest exceptions
+- right now in developement mode we send back an exception page (startup.cs -> app.UserDeveloperExceptionPage)
+- api->properties->launchsettings.json -> api.aspnetcode_env -> to prod -> this changes the environmet to prodction
+- Create a new class which inherits from exception
+- add httpstauts code and error to the consturctor
+
+127. Adding Error handling middleware
+- aspnetcore middlerware
+- create an errorhandlinmiddleware class
+- add a `RequestDeletegate next` param to the constructor
+- add an Invoke method with a httpContext param and add `await _next(context)` - if it's okay then it will execute the next meddleware
+- if the invoke fails then we catch it in the exception and handling every type of ex in a new method (RestException, Exception atm)
+- JsonSerializer is included in v2 of .net framework
+- add values to context.response : statuscode, contentType, response.Write
+- context.Response.StatusCode = (int)re.Code;                     
+- context.Response.ContentType = "application/json";
+- await context.Response.WriteAsync(JsonSerializer.Serialize(new {errors}));
+
+128. Using our Error hanling middleware
+- add the middleware to the startup at the beginning of the config method: app.UseMiddleware<ErrorHandlingMiddleware>();
+
+129. Using Axios interceptors to catch errors
+- we can add an interceptor to the agent.ts file and we can intercept either the request or response
+- axios.interceptors.response.use
+- create a new cmp not found and redirect user there in case of 404
+- Switch cmp from react router to show only one router at once
+
+130. Throwing errors in the client
+- at the moment we have no access to routing functionality inside axios agent file
+- throw error in agent when it's 404
+- throw the error again in the activity store and catch it in the activity detail where we have access to route params
+- would be better to redirect the user inside the interceptor
+
+131. Adding routing functionality to Axios
+- import { Router } from 'react-router-dom'
+- import { createBrowserHistory } from 'history' in index. tsx and refactor BrowseRouter
+- export const history = createBrowserHistory(); - and add this history to the Router
+- use the newly created history const in agetnt.ts
+
+132. Handling and individual GUID on a get request
+- if (status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')) - check for guid validation
+
+133. Adding toast notifications
+ - npm install react-toastify
+- import 'react-toastify/dist/ReactToastify.min.css'; - index.sx
+- <ToastContainer position='bottom-right'/> - to app.tsx
+
+134. Handling network errors in Axios
+-  if (error.message === 'Network Error' && !error.status)
+- dotnet ef database drop -p Persistence/ -s APi/    -> drop db to clear it
+
+135. Summary of section 10

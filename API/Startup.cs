@@ -46,7 +46,7 @@ namespace API
                 // Console.WriteLine("ConfigureDevelopmentServices: " + Configuration.GetConnectionString("DefaultConnection"));
                 
                 // to enable sqlLite: add  "DefaultConnection": "Data source=reactivities.db" - to appsettings.Development.json
-                // delete all migrations and recreate it
+                // delete all migrations and recreate them
                 //opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));       
 
                 // opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));       
@@ -62,7 +62,10 @@ namespace API
             {
                 opt.UseLazyLoadingProxies();
                 // Console.WriteLine("ConfigureProductionServices: " + Configuration.GetConnectionString("DefaultConnection"));
+
+                // delete all migrations and recreate them
                 // opt.UseMySql(Configuration.GetConnectionString("DefaultConnection"));
+
                 // Use Sql if you want to use SQL Server
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });

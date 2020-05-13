@@ -1,0 +1,73 @@
+Section 3: Walking Skleton Part 2 - Client
+19. Selection 3 introduction
+
+20. Using create-react-app to create our React appiocation
+- create react app
+- npx create-react-app client-app --use-npn --typescript inside solution folder
+- cd client-app
+- npm start
+
+21. Reviewing the React project files
+- index.html is placed in the public folder
+- react application will put the code inside the id="root" tag
+- everything inside the rood tag will be replaced
+- index.tsx inside src is the start of the react app
+- tsx - typescript file and the x represents the fact that it's JSX
+- react uses JSX
+- jsx is not html but it is actually javascript
+- {} - Executable javascript code
+- package.js file
+- when we run the app via 'npm start' it will check the scripts property in the package.json file 
+- fb provide the scripts for build configuration and 99% it's good enough, but if you want to change it you can use 'eject' - with this you upgrade
+
+22. Introduction to react - Concepts
+- react uses virtual dom - instead of updating the actual dom directly
+- react stores a component tree inside the virtual DOM
+- whenever a component updates then it's just sent this update that's sent to the virtual to the actual dom and acts like a patch in the actual DOM
+- react class cmp and norml javascript function cmp
+
+23. Introduction to react - Components
+- states and props
+- react has on way binding
+
+24. Introduction to TypeScript
+
+25. TypeScript basic Demo
+- superset of JavaScript
+- all ts code is going to be compiled into javascript
+- in package.json we have typescript dependency.
+- ts.config we define how should the compiler behave
+
+26. Using Typescript with React
+- rafc command to create react functional cmp
+- the code is compiled down into es5 javascript
+
+27. Adding React dev tools
+- add react developer tools in chrome web store (has no support for FC)
+- we install the beta version: react-detools-experimental
+- https://react-devtools-experimental-chrome.now.sh/
+
+28. React Class Components
+- class App extends Component
+- use .map to loop over an array
+
+28. Using React State
+
+29. Fetchig data from the API
+- axios for http requests
+- npm install axios
+
+30. Adding CORSsupport to the API
+- cors - cross origin resource sharing
+- allow any request and any method from a specific url
+
+31. Adding Sematic UI Reac to our app
+- npm install semantic-ui-react
+- https://react.semantic-ui.com/usage
+- add css to index.html: <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+- same as material ui (css frameworks)
+
+32. Clean up and saving our code to source control
+
+33. Summary of section 3
+- cors is designed to hide data in the browser from an unknown origin, and does not prevent the api to send the data

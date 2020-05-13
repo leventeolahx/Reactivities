@@ -1,0 +1,34 @@
+Section 15: Adding Client side attendances
+206. Section 15 introduction
+
+207. Adding attendees to our list items
+- Create a new activity list Item attendees cmp and list the attendees there
+- Popup is the same as popover in material
+
+208. Adding attendees to the Detailed view sidebar
+- configure activityDetailedSidebar to use attendeeList
+
+209. Adding the IsGoing and IsHost properties to the Activityinterface
+- extend fronted iactivity interface with isgoing and isHost
+- set the new props inside activity store, using (from) the attendees list
+- refactor acitvitylist item to show is going and isHost. Added images and dispalyNames
+
+210. Conditionally rendering the activity detailed headerbuttons
+- show the join, cancel and manage buttons depending on the user
+
+211. Adding the cancel attendance function
+- crateattendee -> move the function to the util file so we can reuse it later
+- add attendActivity method to activityStore
+- add cancelAttendance method to activity store
+- do not forget to add observer to activity detail sidebar (but in general)
+
+212. Hooking it all up to the API
+- add to agent.ts: attend: (id: string) => request.post(`/activities/${id}/attend`, {}),
+- add a new observable to activityStore: @observable loading = false;
+- hook up the apis for attend and unattend. Use runInAction methods after async method!!!
+
+213. Loose ends
+- we need to set the isHost prop for the newly created user as we don't fetch it from api after creation (createActivity in activityStore)
+
+214. Summary of section 15
+- adding attendences to client

@@ -1,0 +1,42 @@
+React + MobX: 
+
+1.2. Setting up the dev env 
+
+- Install .Net core 3.0.0
+- check version in cmd: dotnet --info
+
+- Install Node.js
+- Use NVM (node version manager)
+- e.g. nvm use v8.11.2
+- node --version
+
+- Install Git
+
+- Install IDE (VSCode)
+
+
+1.3. VSCode Extensions
+
+- to open vs code from cmp: code .
+- inside vsc:  ctrl + E, type > path to install path fo command prompt
+
+Install extensions:
+- Auto Rename Tag
+- Bracket Pair Colorizer 2
+- ES7 React/Redux/GraphQL/React-Native snippets
+- Material Icon Theme (activate it by CTRL + E and type Material Icon Theme. Set back VSCode theme: Set in Ctrl+E)
+- Prettier - Code formatter or use vs default (SHIFT + ALT + F)
+- add prettier to vs code and set this in the text editor json setting: 
+-     "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+
+
+For C#:
+- C#
+- C# extensions
+- Nuget Package Manager
+- SQL Lite
+
+1.4. Source code and resources for this course
+- D:\OnlineCourses\DotNetCoreReactMobx
