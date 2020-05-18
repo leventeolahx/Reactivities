@@ -1,26 +1,26 @@
 Section 6: Axios
-70. Section 6 intruduction
+70. Section 6 introduction
 - there is a built in javascritp method for http requests called fetch, it's low level
 
-71. Setting up the agent.ts ile
-- create api folder inside the app folder and create agnet.ts inside api folder
+71. Setting up the agent.ts file
+- create api folder inside the app folder and create agent.ts inside api folder
 - setting up the base url for axios and response body
 - we also store our base requests in a const, which we will use it later. These requests use axios
-- We create a constant for our activities feature which use the previously created request const
+- We create a constant for our activities feature which uses the previously created requestBody const
 
 72. Listing our activities
 - We can define what to get back from the api eg: list: (): Promise<IActivity[]> => request.get();
 - change using axios directly, but use it via the agent
 
-73. Updatng an Activity
+73. Updating an Activity
 - using agent.ts activities to update the db
 
 74. Adding a delay to our API methods
 - we are going to slow down the request to simulate slow request, only for development mode
 - process of carrying a function -> and carrying is a process when we can transform a function with multiple argument into a seq of nesting function
 
-- So we already know that our GET request returns the response which is passed to our the methods and
-then inside our then method we're going to call the sleep function which takes a parameter of milliseconds
+- So we already know that our GET request returns the response which is passed to our 'then' methods and
+then inside our 'then' method we're going to call the sleep function which takes a parameter of milliseconds
 but by using currying we're also passing in the response as the second parameter.
 And when we resolve this promise that we're creating here then we're going to resolve our response and
 take in a number of milliseconds as the parameter for our set timeout function and the end result of
@@ -29,7 +29,7 @@ this is that we sleep our request for a second before passing back the response 
 75. Adding a loading component
 - we created a loading cmp using semantic ui: Dimmer
 
-76. Adding a loding indication for submiting data
+76. Adding a loading indication for submitting data
 - we have created a new state prop which is updated before and after a request is made
 - loading property on the button
 
@@ -38,6 +38,6 @@ this is that we sleep our request for a second before passing back the response 
 - isolate on delete button by adding the activity id as a name of the button, then parse the button click event up the the parent
 - create a state for target and set the target name in the delete handler 
 - parse down the target to the activity List and check if the delete button activity.id is equal to props.target
-- before movng to the next section we clear the db: dotnet ef database drop -p Persistence/ -s API/
+- before moving to the next section we clear the db: dotnet ef database drop -p Persistence/ -s API/
 
 78. Summary of section 6

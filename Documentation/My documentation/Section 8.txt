@@ -12,21 +12,21 @@ Section 8: React Router
 - import Router from react-router-dom
 - add exact prop to only match if it's exactly
 
-97. Adding Links and Navinks
+97. Adding Links and Navlinks
 - <Menu.Item header  as={Link}  to='/'  >
 - you can use NavLink as well
 
-98. Adding theDetails link
+98. Adding the Details link
 - <Route path='/activities/:id' component={ActivityDetails} />
 - as={Link} to={`activities/${activity.id}`} - in list cmp
 
-99. Getting an activity rom the API
+99. Getting an activity from the API
 - calling the detail api and assigning to the activity
 
 100. Using Route params
-- when we use react route we that history, location and mach props added to the cmp
+- when we use react route we have access to history, location and match props added to the cmp
 - react router props are in the: RouteComponentProps
-- RouteComponentProps<DetailParams> - you can add a type param to routcompprops to can get access to the param fields
+- RouteComponentProps<DetailParams> - you can add a type param to routComponentProps to can get access to the param fields
 
 101. Navigate via code
 -  history.push('/activities')
@@ -35,28 +35,28 @@ Section 8: React Router
 - <Route path={['/createActivity', '/manage/:id']} component={ActivityForm} /> - to use multiple rout for the same cmp
 - if you use the async keyword, that will automatically return a promise
 - we get the activity from store/ api only if it has a params id and set the activity in th then method
-- initialFormState us undefined when the page first loads
+- initialFormState use undefined when the page first loads
 - then we load loadActivity and that sets the activity in the store
 - which updates the cmp
 - so the activity will be displayed
 
-103. Usin a Full Uncontrollerd Component with a key to reset component state
-- use return in useeffect to clear the selected activity
+103. Using a Full UnControlled Component with a key to reset component state
+- use return in useEffect to clear the selected activity
 - use withRouter
 - export default withRouter(observer(App));
 - <Route key={location.key}
-- whenever the location key changes which it does when we nav. to create an act. then the cmp where the location.key is added will be re init
+- whenever the location key changes which it does when we navigate to create an activity, then the cmp where the location.key is added will be re-initialized
 
 104. Navigate after submission
 - we used history.push after the create activity. the create activity caused the use effect to reload and we had a console error. To fix it we check for activity id as well.
 
-105. Moving the home page outsie of our navigation routes
+105. Moving the home page outside of our navigation routes
 - <Route path='/(.+)' /> - means we have a route with / and anything else
 - <Route path='/(.+)' render={() => (react elements here)} - when you want e.g to add a conditional routing
 
-106. Scrollling to the top of the page on navigation
-- copy scroll to top function from react router page and create a cmp in our app. Wrap <app /> into this scrolltotop cmp
+106. Scrolling to the top of the page on navigation
+- copy scroll to top function from react router page and create a cmp in our app. Wrap <app /> into this scrollToTop cmp
 
-107. More code cean up
+107. More code clean up
 
 108. Summary of section 8

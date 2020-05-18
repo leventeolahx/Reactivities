@@ -16,16 +16,16 @@ Section 7: MobX
 
 82. Refactoring the activity list to use the store
 - if we want to use in react cmp fields which are mobx observables we need to make the react cmp as observer
-- observer is a higher order cmp and takes the cmp as a partameter
+- observer is a higher order cmp and takes the cmp as a parameter
 
-83. Refactoring the select acivity function
+83. Refactoring the select activity function
 - we have made the activityDashboard as an observer then move the selectedActivity and selectActivity to the activity store. Also refactor it
 
-84. Usin Async Await in our methods
+84. Using Async - Await in our methods
 -  .catch(error => console.log(error)) - for rejections
-- when using promis chaining, the then method is resolved when the promise is fulfiled
-- the code inside the then method is only going to be executed when the request is fulfiled
-- when we use await we block the execution of code that is below until the code is fulfiled
+- when using promise chaining, the then method is resolved when the promise is fulfilled
+- the code inside the then method is only going to be executed when the request is fulfilled
+- when we use await we block the execution of code that is below until the code is fulfilled
 
 85. Refactoring the create activity method
 - we have refactored the create activity the same way as we did with the other one
@@ -37,14 +37,14 @@ Section 7: MobX
 87. Using an ObservableMap
 - @observable activityRegistry = new Map(); - it's like a dictionary in C#
 
-88. Adding the edit activiy action
+88. Adding the edit activity action
 - same as create activity with mobx
 
-89. Addng the delete activity action
-- same refator
+89. Adding the delete activity action
+- same refactor
 
 90. Cleaning up our code
-- remove unnessecary code
+- remove unnecessary code
 
 91. Enabling MobX strict mode
 - mobx advice is to move all code inside an action which mutates states
@@ -59,4 +59,4 @@ Section 7: MobX
 - https://chrome.google.com/webstore/detail/mobx-developer-tools/pfgnfdagidkfgccljigdamigbcnndkod/related
 
 93. Summary of section 7
-- you can use mobx without decoratios, the a you would have used a normal class then add all the methods to the decorator function
+- you can use mobx without decorations, the same way you would have used a normal class then add all the methods to the decorator function

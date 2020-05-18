@@ -4,7 +4,7 @@ Section 24: Bonus - Identity Cookbook
 - fb send back a token
 
 311. FB Login - Setting up the app in Facebook
-- developers.facefook.com
+- developers.facebook.com
 - create an app
 
 312. FB Login - Creating a new Git branch to work from
@@ -40,7 +40,7 @@ Section 24: Bonus - Identity Cookbook
 - we need access for http client provided by dotnet core: private readonly HttpClient _httpClient;
 - bring IOptions<FacebookAppSettings> config in the constructor. dependency injection will bring in the settings as we added to startup
 - configure _httpClient with header and uri (graph.facebook)
-- inside FacebookLogin verifiyToken using _httpClient and my fb app credentials
+- inside FacebookLogin verifyToken using _httpClient and my fb app credentials
 - Generate generic GetAsync method 
 - private async Task<T> GetAsync<T>(string accessToken, string endpoint, string args)
 - request the client with _httpClient
@@ -51,10 +51,10 @@ Section 24: Bonus - Identity Cookbook
 316. FB Login - Adding the Facebook login handler
 - Add ExternalLogin login handler to app proj user's folder
 - instantiate photos in appUser constructor: Photos = new Collection<Photo>();
-- inside handle method: call FacebookLogin (validate and returns the user), get user by email from _usermanager. Create user in db if case
-- return User: generate jwt tokent
+- inside handle method: call FacebookLogin (validate and return the user), get user by email from _userManager. Create user in db if case
+- return User: generate jwt token
 
-317. FB Login - Adding the API Controller method and tying it together with the clien
+317. FB Login - Adding the API Controller method and tying it together with the client
 - create FacebookLogin api method
 - Extend fbLogin in userStore to call the api
 - userStore:fbLogin -> update commonStore's token. and close the modal

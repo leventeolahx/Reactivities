@@ -1,6 +1,6 @@
 Section 23: Bonus - Course update Nov 2019 - Migrate from .Net Core 2.2 to .Net Core 3.0
 308. Migrate your project from .net core 2.2 to 3.0 part 1 - Startup files
- - dotnet --info dotnet --version
+- dotnet --info dotnet --version
 - change api.csproj to user netcoreapp3.0
 - remove startup services.MVC and change it to Controllers as we do not use razor
 

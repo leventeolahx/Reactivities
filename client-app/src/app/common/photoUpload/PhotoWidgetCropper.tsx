@@ -18,7 +18,6 @@ const PhotoWidgetCropper: React.FC<IProps> = ({ setImage, imagePreview }) => {
             setImage(blob);
         }, 'image/jpeg');
     }
-    console.log('')
 
     return (
         <Cropper

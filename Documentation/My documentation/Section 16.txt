@@ -1,65 +1,65 @@
 Section 16: Photo Upload Part 1 - API
 215. Section 16 introduction
 Options to store files:
-- db: it's not good practice to store files in db: ineficient, take to much space from db (disk space issue)
+- db: it's not good practice to store files in db: inefficient, take to much space from db (disk space issue)
 - file system: same disk space issue
 - cloud service: scalable, expensive, secured with api key
 
 216. Cloudinary settings
 - https://cloudinary.com - create a new account and use the free plan
 - dotnet user-secrets set "Cloudinary:CloudName" "your key"
-- create a new photos folder to infrastructure project and create a cloudinarySettings file with the key that we prev. added to user-secretes
-- services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"); - Configuration has access to userSecrets, appsettings config etc.
-- We used 'Cloudinary:'  when we set the user secrets and this way we can access it as Configuration.GetSection
+- create a new photos folder to infrastructure project and create a cloudinarySettings file with the key that we previously added to user-secretes
+- services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"); - Configuration has access to userSecrets, appSettings config etc.
+- We used 'Cloudinary:' when we set the user secrets and this way we can access it as Configuration.GetSection
 - install CloudinaryDotNet to infrastructure proj
 
 217. Adding the interface and class for our Photo Accessor
 - create new IPhotoAccessor interface
 - Create new folder Photos in application proj
 - Move PhotoUploadResult to Photos Folder
-- IPhotoAccessor has atm two methods: AddPhoto and DeletePhoto - both will be handled in infrastr proj and will have their own return type
-- Create the actual class of IPhotoAccessor in instastructure proj called: PhotoAccessor, and implement that interface
-- services.AddScoped<IPhotoAccessor, PhotoAccessor>(); - add it to the startup.cs so that we can incest to the app when we need to
+- IPhotoAccessor has atm two methods: AddPhoto and DeletePhoto - both will be handled in infrastructure proj and will have their own return type
+- Create the actual class of IPhotoAccessor in infrastructure proj called: PhotoAccessor, and implement that interface
+- services.AddScoped<IPhotoAccessor, PhotoAccessor>(); - add it to the startup.cs so that we can insert to the app when we need to
 
 218. Adding the AddPhoto handler
 - create a new _cloudinary private prop and initialize it in the constructor
 - Inject public PhotoAccessor(IOptions<CloudinarySettings> config) to use config.Value.APIKey 
-- the Cloudinary setting is set up in the startUp to be a config and dependention injection will take care of it
-- extend AddPhoto method: - openReadStrean, create uploadParams, upload file to cloudinary, user uploadresult
+- the Cloudinary setting is set up in the startUp to be a config and dependency injection will take care of it
+- extend AddPhoto method: - openReadStream, create uploadParams, upload file to cloudinary, user uploadResult
 
 219. Adding the Domain Entity
-- Add a new entity Photo, virtual Icollection<Photo> photos to appuser
-- cuz user - photos is a one to manytomany relationship and we've def the Photos prop inside appuser we don't need to provide additiona config
+- Add a new entity Photo, virtual ICollection<Photo> photos to appUser
+- cuz user - photos is a one to many-to-many relationship and we've defined the Photos prop inside appUser we don't need to provide additional config
 - dotnet ef migrations add "PhotoEntityAdded" -p Persistence/ -s Api/
 
 220. Adding the Add Photo Handler
 - add Photo.Add handler
-- add to command: public IFormFile File { get; set; } - aspNetcore.Http
+- add to command: public IFormFile File { get; set; } - aspNetCore.Http
 - inject: IUserAccessor, IPhotoAccessor
 - create the photo using accessor, get the user from context using accessor, create photo object and save it
 
 221. Adding the Photo API Controller
 - Create a new PhotosController and inherit from base controller
-- add add photo api
+- add photo api
 - instead of sending json text in the body, we send as form-data
 - add [FromForm] to api method so api will know where to locate the file
-- Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face") - cloudinary is able to crop imgs
+- Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face") - cloudinary is able to crop images
 
 222. Adding User Profiles feature
 - Create a new folder and c# file: Profiles.cs
-- Create detail hander in application proj inside Profiles
+- Create detail handler in application proj inside Profiles
 - Create a new ProfilesController
 
 223. Adding the Delete photo handler
 - Extend delete photo in photo accessor, user deletionParams, and Cloudinary.destroy. return "ok" or null
-- Create the delete handler. Get user, and photo. Delete photo using PhotoAccessor. Check result. remove photo user. 
+- Create the delete handler. Get user, and photo. Delete photo using PhotoAccessor. Check result. Remove photo user. 
 - add delete api to photos controller
 
 224. Adding the set main photo functionality
 - Add setMain photo mediator handler. Call it in api
 
 225. Adding the Mapping Profile configuration for User images
-- add Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url, to register, login,  current user and attendees
+- add Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url, to register, login, current user and attendees
 
 226. Summary of section 16
 - cloudinary storage

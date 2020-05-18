@@ -21,9 +21,9 @@ Section 22: Final touches and publishing
 - return (props) => isLoggedIn ? <Component {...props} /> : <Redirect to={'/'} />
 
 290. Adding logout for token expiry
-- add  ValidateLifetime = true, ClockSkew=TimeSpan.Zero, to startup (authent)
-- add .WithExposedHeaders("WWW-Authenticate") to startup cors, because this is not exposed aoutomatically
-- remove jwt from localstorage if the response is 401 and www-authenticate is expired
+- add  ValidateLifetime = true, ClockSkew=TimeSpan.Zero, to startup (authentication)
+- add .WithExposedHeaders("WWW-Authenticate") to startup cors, because this is not exposed automatically
+- remove jwt from localStorage if the response is 401 and www-authenticate is expired
 
 291. Safari bug fix
 - const dateString = date.toISOString().split('T')[0];
@@ -41,14 +41,14 @@ Section 22: Final touches and publishing
 - npm run build - to build the app - this creates a build folder
 
 294. Serving the production React app from the API server
-- we want to take the build folder the was just created and move it to the api and serve this from our kestrel server
+- we want to take the build folder that was just created and move it to the api and serve this from our kestrel server
 - add to package.json to scrips section: "postbuild": "move build ../API/wwwroot",
 - run: npm run build
 - add wwwroot to gitignore
 - now we need to tell our api to serve the static content that are in the wwwroot folder
 - app.UseDefaultFiles(); to startup - looks in the wwwroot folder for any files called like index.html
 - app.UseStaticFiles(); add it before useRouting
-- endpoints.MapFallbackToController("Index", "Fallback"); - to UseEndpoints - will falback if there the api does not know about the requested endpoint
+- endpoints.MapFallbackToController("Index", "Fallback"); - to UseEndpoints - will fallback if there the api does not know about the requested endpoint
 - create FallbackController : Controller - we need to inherit from Controllers to send back a view which is a html page (which is index.html)
 - create an index method with AllowAnonymous
 - return return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
@@ -59,13 +59,13 @@ Section 22: Final touches and publishing
 - download and install from mysql.com/downloads
 - grab mySql Community Server
 - open mysql command line client
-- enter password added during instalation
+- enter password added during installation
 - show databases;
 - create mysql user:  CREATE USER 'appuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Pa$$w0rd';
 - add all role to the user: GRANT ALL PRIVILEGES ON *.* TO 'appuser'@'localhost' WITH GRANT OPTION;
 - FLUSH PRIVILEGES;
 - install MySQL management tool (Jun Han) to vs Code
-- go to command shell, search MySql->click on add connection -> host will be localhost -> user will be appuser -> pass -> port 3306
+- go to command shell, search MySql -> click on add connection -> host will be localhost -> user will be appuser -> pass -> port 3306
 
 296. Adding additional DB providers for Entity Framework
 - add microsoft.entityFrameworkCore.sqlServer, select sql server select 3.1 to proj persistence
@@ -75,33 +75,33 @@ Section 22: Final touches and publishing
 - where we use: Sqlite:Autoincrement
 
 297. Swapping the DB for MySQL
-- api: appsettings.json file is read to get configurations. appsettings.development is only read in dev mode
-- add mysql or sql server db connetion string to appsetting.json 
-- sql server cnstr: Server=; Database=; User_Id=; Password=;
+- api: appSettings.json file is read to get configurations. appSettings.development is only read in dev mode
+- add mysql or sql server db connection string to appSetting.json 
+- sql server constructor: Server=; Database=; User_Id=; Password=;
 - create ConfigureDevelopmentServices, ConfigureProductionServices to separate db connections and call Configure services in both
-- launchSettings.json: chande Environment to production  for api
-- list users secrets and add them to appsettings: dotnet user-secrets list
-- now we configured the project in prodoction mode for Mysql, but we can simply change it to SQL Server by changing the connectionstring and the provider in startup
+- launchSettings.json: change Environment to production  for api
+- list users secrets and add them to appSettings: dotnet user-secrets list
+- now we configured the project in production mode for Mysql, but we can simply change it to SQL Server by changing the connectionString and the provider in startup
 - DROP DATABASE reactivities; - MYSQL syntax
 - API/Properties/launchSettings.json - API -> "ASPNETCORE_ENVIRONMENTL": "Development" // change to Production
-- NOTE: don't forget to add enviroment variable to os (linux): export ASPNETCORE_ENVIRONMENT=Production
+- NOTE: don't forget to add environment variable to os (linux): export ASPNETCORE_ENVIRONMENT=Production
 - win: https://andrewlock.net/how-to-set-the-hosting-environment-in-asp-net-core/ -> setx ASPNETCORE_ENVIRONMENT "Development"
 - dotnet ef migrations add GeneratedForMySql1 -p Persistence/ -s API/
-- to run the project with mySql: change connectionstrings, set env variable to prod, delete and regenerate migrations, add annotations 
-- to enable sqlLite: add  "DefaultConnection": "Data source=reactivities.db" - to appsettings.Development.json
+- to run the project with mySql: change connectionStrings, set env variable to prod, delete and regenerate migrations, add annotations 
+- to enable sqlLite: add  "DefaultConnection": "Data source=reactivities.db" - to appSettings.Development.json
 - delete all migrations and recreate it, use: opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));  in startup
 
 298. Publishing the app to Linux - Part 1
-- if mysql is not running, go to services and run MySQL80 (crtl+shift+esc)
+- if mysql is not running, go to services and run MySQL80 (ctrl + shift + esc)
 - then open mysql and enter password
 - create an account at digitalocean.com
 - create a new doplets
-- select from marketplace: Lamp and configure to the cheepest one
-- choose on-time pass for simplycity
+- select from marketplace: Lamp and configure to the cheapest one
+- choose on-time pass for simplicity
 - select ony 1 droplets and add the name: Reactivities-Demo
 - Create Droplets
 - Enable port 22: https://www.tomshardware.com/news/how-to-open-firewall-ports-in-windows-10,36451.html
-- open poweshell in windows
+- open powershell in windows
 - shh root@ipaddressfromdigitalocean
 - paste the password that we got in the email
 - change the password
@@ -111,19 +111,19 @@ Section 22: Final touches and publishing
 - create the app user and add permissions
 - install dotnet runtime onto our linux machine (there is a link in the list)
 - configure apache
-- configure virtual host: lisen on the ip address *:80. Also configure logs and configure websocket port for signalr
+- configure virtual host: listen on the ip address *:80. Also configure logs and configure websocket port for signalR
 
 299. Publishing the app to Linux - Part 2
 - install deploy reloaded vs code extension
-- ass settings.json to vscode folder and add the settings from Neil
+- add settings.json to vscode folder and add the settings from Neil
 - run from cl to create the publish: dotnet publish -c Release -o API/publish --self-contained false Reactivities.sln
 - add to all proj files: <GenerateAssemblyInfo>false</GenerateAssemblyInfo/>
 - vs code: ctrl + e: select deploy: deploy and select the package
 - add more config to linux server like env variables and port config
 - we added a kestrel-web.service which runs api.dll from reactivities using dotnet runtime
 - check: netstat -ntpl if there is no port 5000 (where the api runs) - install dotnet runtime again and check kestrel-web.service
-- check: ls /etc/apache2/sites-enabled/. In this case there is 2 config there. We have to disable the default config so only reactivites.conf is enabled
-- disalbe config: a2dissite 000-default => plus relaod apache2:  systemctl reload apache2
+- check: ls /etc/apache2/sites-enabled/. In this case there is 2 config there. We have to disable the default config so only reactivities.conf is enabled
+- disable config: a2dissite 000-default => plus reload apache2: systemctl reload apache2
 
 300. Configuring Apache to use an HTTPS SSL certificate
 - sshh root@ip
@@ -137,9 +137,9 @@ Section 22: Final touches and publishing
 - webBuilder.UseKestrel(x => x.AddServerHeader = false); - to program.cs
 - add: NWebsec.AspNetCore.Middleware -> api -> latest
 - app.UseXContentTypeOptions(); // prevent content snipping
-- app.UseReferrerPolicy(opt => opt.NoReferrer()); // allow us to restrict the amount of infos to be parse on to other site when reffering to other site
+- app.UseReferrerPolicy(opt => opt.NoReferrer()); // allow us to restrict the amount of infos to be parse on to other site when referring to other site
 - app.UseXXssProtection(opt => opt.EnabledWithBlockMode()); // this one stops pages when they detect reflected cross site scripting attacks
-- app.UseXfo(opt => opt.Deny()); // block iframes to prevent click jacking attacks
+- app.UseXfo(opt => opt.Deny()); // block iFrames to prevent click jacking attacks
 - app.UseCspReportOnly(opt => opt
                 .BlockAllMixedContent() // prevent loading any assets using http when the page is loaded used https
                 .StyleSources(s => s.Self()) //
@@ -152,18 +152,18 @@ Section 22: Final touches and publishing
 
 302. Adding Content Security Policy to our API
 - we need to clean the console
-- install: npm install semantic-ui-css  and add the import it to index.tsx
+- install: npm install semantic-ui-css and add the import it to index.tsx
 - remove from index.html the link to cdn
 - delete wwwroot folder from api and rebuild the client app
-- UseCspReportOnly -> writed to the console the security issues which need to be fixed
-- copy the links from the console and add it the sturtup as customsource
+- UseCspReportOnly -> it's written to the console the security issues which need to be fixed
+- copy the links from the console and add it the startup as customSource
 - .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com")) //
 - .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com")) // allows fonts only from specified sources
 - .ScriptSources(s => s.Self().CustomSources("sha256-ma5XxS1EBgt17N22Qq31rOxxRWRfzUTQS1KOtfYwuNo="))
-- inline style because it violates the following Content Security Policy directive: fix: just remove inlilne stle from index.html
+- inline style because it violates the following Content Security Policy directive: fix: just remove inline style from index.html
 - .StyleSources(s => s.Self().CustomSources("https://fonts.googleapis.com", "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs=")) //
 - after you fixed the security header, set back app.UseCsp(opt => opt instead of app.UseCspReportOnly
-- rebuild client app and republish the code to linux server (make the package (package will be the "package" propin the settings.json file - Neil provided that one) and publish that package via deploy reloaded)
+- rebuild client app and republish the code to linux server (make the package (package will be the "package" property in the settings.json file - Neil provided that one) and publish that package via deploy reloaded)
 - dotnet publish -c Release -o API/publish --self-contained false Reactivities.sln
 - restart the kestrel service: sudo systemctl restart kestrel-web.service
 
@@ -177,13 +177,13 @@ Section 22: Final touches and publishing
 - select free pricing  + create db
 - select application insights and create
 - open the reactivitiesGroups- open sql db -> firewalls - add the ip
-- copy connection string from sql database
+- copy connectionString from sql database
 - install azure web service extension to vsCode
 - login to azure from left panel
 
 305. Publishing our App to Azure
-- add con string to appsettings
-- delete migrations and generate it for sqlserver
+- add connectionString to appSettings
+- delete migrations and generate it for sqlServer
 - run the api to create the db in azure as the connection string is set (creates the db in azure)
 - dotnet build
 - delete publish directory from api
@@ -192,13 +192,13 @@ Section 22: Final touches and publishing
 - select folder to deploy
 - select publish file
 - select the location where we want to deploy and deploy it
-- add to apip.csproj <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+- add to api.csproj <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
 - <AspNetCoreModuleName>AspNetCoreModule</AspNetCoreModuleName>
 
 306. Tweaking the Azure deployment
-- AppService - configuration add the environment variables, connectionstings
-- we can confugure from vs code inside azure webservice
-- remove env variabiles from appsettings.json
+- AppService - configuration add the environment variables, connectionStings
+- we can configure from vs code inside azure webService
+- remove env variables from appSettings.json
 - add app.UseHsts();
 - redeploy
 

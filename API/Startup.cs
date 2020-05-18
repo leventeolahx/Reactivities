@@ -42,6 +42,7 @@ namespace API
         {
             services.AddDbContext<DataContext>(opt =>
             {
+                // virtual keyword is used for LazyLoading
                 opt.UseLazyLoadingProxies();
                 // Console.WriteLine("ConfigureDevelopmentServices: " + Configuration.GetConnectionString("DefaultConnection"));
                 
@@ -84,6 +85,7 @@ namespace API
                         .AllowAnyMethod()
                         .WithExposedHeaders("WWW-Authenticate")
                         .WithOrigins("http://localhost:3000")
+                        // because we send the access_token as routeParam for signalR
                         .AllowCredentials();
                 });
             });
@@ -102,11 +104,13 @@ namespace API
                 cfg.RegisterValidatorsFromAssemblyContaining<Create>()
             );
 
+            // by adding AddIdentityCore to the service, our app has the ability to create and manage users via UserManager service which we get from IdentityCore
             var builder = services.AddIdentityCore<AppUser>();
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
 
+            // Authorize the user by doing additional checks
             services.AddAuthorization(opt =>
             {
                 opt.AddPolicy("IsActivityHost", policy =>
@@ -115,8 +119,10 @@ namespace API
                 });
             });
 
+            // addTransient is only available on the lifetime of the operation not the request
             services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
 
+            // validate the request with JWT
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(opt =>

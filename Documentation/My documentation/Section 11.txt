@@ -6,23 +6,23 @@ Section 11: Forms
 - npm install react-final-form final-form -> install this packages
 - import { Form as FinalForm, Field } from 'react-final-form'
 - we no longer need the on change event as this is gonna be handled by react final form
-- we added a FinalForm cmp to the ActivityForm.tsx with onSubmit and render  props. 
-- For onsubmit create a new handler. Inside the render we wrap the previous form
+- we added a FinalForm cmp to the ActivityForm.tsx with onSubmit and render props. 
+- For 'onSubmit' create a new handler. Inside the render we wrap the previous form
 
 138. Creating a reusable Text input field
-- interface IPorps extends FieldRenderProps<string, HTMLInputElement>, FormFieldProps  - we ext the input field props from the prev two interf
+- interface IProps extends FieldRenderProps<string, HTMLInputElement>, FormFieldProps  - we extend the input field props from the prev two interface
 
 139. Refactoring the form to use React Final Form
-- resuse previously create cmp
+- reuse previously create cmp
 
 140. Creating a reusable Text Area Input field
 - Create the same cmp as text input except here we use textarea
 
 141. Creating a reusable Select input field
-- Create a select cmp and reuse previous cmps
+- Create a select cmp and reuse previous cmp
 
 142. Setting up React Widgets
-- for datepicker and date formatter:  npm install react-widgets react-widgets-date-fns
+- for datePicker and date formatter:  npm install react-widgets react-widgets-date-fns
 - for date formatter: npm install date-fns@^2.0.0
 - http://jquense.github.io/react-widgets/
 - add css: import 'react-widgets/dist/css/react-widgets.css';
@@ -43,27 +43,27 @@ Section 11: Forms
 - {format(activity.date!, 'eeee do MMMM')}
 
 145. Creating separate Date and Time fields
-- create two separate cmps one for date and one for time
-- export interface IActivityFormValues extends Partial<IActivity> - all poperties that we parse into it are optional
+- create two separate cmp, one for date and one for time
+- export interface IActivityFormValues extends Partial<IActivity> - all properties that we parse into it are optional
 
 146. Combining Date and Time inputs
 - create combineDateAndTime util method
 - const { date, time, ...activity } = values; - spread in activity all props except date and time
 
-147. Initialising the form with data
+147. Initializing the form with data
 - export class ActivityFormValues implements IActivityFormValues
 - Object.assign(this, init); - populates class props from constructor param (typescript ^2.0)
 - (activity) => setActivity(new ActivityFormValues(activity)) - we can set now with activityFormValues due that class implement and extends (IActivityFormValues and IActivity)
 
 148. Submitting data to the server
-- this.activityRegistry.set(activity.id, activity); on load acticity
+- this.activityRegistry.set(activity.id, activity); on load activity
 
 149. Form error handling
 
 150. Form validation
 - server side validate is very important
 - npm install revalidate - the package that we are using for validation
-- use combineValidators and define the filed validateors
+- use combineValidators and define the filed validators
 - onBlur={input.onBlur} onKeyDown={(e) => e.preventDefault()} - add for dateInput
 
 151.Summary of section 11

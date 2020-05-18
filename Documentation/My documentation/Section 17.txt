@@ -2,7 +2,7 @@ Section 17: Photo Upload Part 2 - Client
 227. Section 17 introduction
 - adding photos to profile and activity
 - adding upload widget
-- react Dropzone
+- react DropZone
 - react Cropper
 - additionally photo settings
 
@@ -10,7 +10,7 @@ Section 17: Photo Upload Part 2 - Client
 - adding links to user profile page and create profile page tsx
 
 229. Adding the Profile Header component
-- create profileheader.tsx
+- create profileHeader.tsx
 - add static profile header from code snippets. use reveal with move action to hide and show content
 
 230. Adding the Profile content component
@@ -18,18 +18,18 @@ Section 17: Photo Upload Part 2 - Client
 - create panes list object and assign that panes to Tab cmp: - { menuItem: 'About', render: () => <Tab.Pane>About content</Tab.Pane> },
 
 231. Getting the profile data from the API
--  create a new profile.ts to models folder
+- create a new profile.ts to models folder
 - Add profile to agent.ts and create a new profile store
 - create the loadProfile action in profileStore
-- ProfilePage.tsx: use routeparams to get the username:interface IProps extends RouteComponentProps<RouteParams> { }... RouteParams is def by me
-- use { match } - destructure in the props to use routeparams... match.params.username
-- add profile to profile header and destructure it
+- ProfilePage.tsx: use routeParams to get the username:interface IProps extends RouteComponentProps<RouteParams> { }... RouteParams is def by me
+- use { match } - restructure in the props to use routeParams... match.params.username
+- add profile to profile header and de-structure it
 - add observer to ProfilePage
 
 232. Displaying User images on the profile page
 - create ProfilePhotos.tsx
-- In the profilephotos use tab.Pane cmp and wrap the profile photos inside it. Use card.group and card to display the images
-- add profilePhotos cmp to panes menu item list in prolecontent.tsx
+- In the profilePhotos use tab.Pane cmp and wrap the profile photos inside it. Use card.group and card to display the images
+- add profilePhotos cmp to panes menu item list in profileContent.tsx
 
 233. Conditionally rendering the Photo Upload Widget
 - add @computed get isCurrentUser() to profileStore.ts- so that we know  that we are in the current logged user profile
@@ -37,24 +37,24 @@ Section 17: Photo Upload Part 2 - Client
 - useState for addPhotoMode - to show add photo widget that we will create later
 
 234. Creating a Photo Upload Widget
--  create a new folder in src/app/common -> PhotoUpload
+- create a new folder in src/app/common -> PhotoUpload
 - create photoUpload.tsx from snippets
 - profileContent in the tab you can set activeIndex
 
-235. React Dropzone
+235. React DropZone
 - http://react-dropzone.netlify.com/
 - npm install react-dropzone
 - PhotoWidgetDropZone.tsx
-- go to the doc an copy past the MyDropezone function and add it to the newly created file
-- add PhotoWidgetDropZone to PhotoUploadWiget cmp
+- go to the doc an copy past the MyDropeZone function and add it to the newly created file
+- add PhotoWidgetDropZone to PhotoUploadWidget cmp
 - setFiles(acceptedFiles.map((file: object) => Object.assign(file, { preview: URL.createObjectURL(file) })) - set preview using URL
-- preview: URL.createObjectURL(file) - is predef in JS (defines a blob url in the client memory, only one browser can see it, cannot be reused
+- preview: URL.createObjectURL(file) - is predefined in JS (defines a blob url in the client memory, only one browser can see it, cannot be reused)
 
 236. Styling our Dropzone
 - files.forEach(file => URL.revokeObjectURL(file.preview)) - use it in a useEffect to free up memory
 
 237. React Cropper Part 1
-- add PhotoWigetCropper.tsx
+- add PhotoWidgetCropper.tsx
 - npm install react-cropper@1.2.0 - https://github.com/roadmanfong/react-cropper
 - npm install @types/react-cropper
 - const [image, setImage] = useState<Blob |null>(null); - to photoUploadWidget
@@ -64,15 +64,15 @@ Section 17: Photo Upload Part 2 - Client
 238. React Cropper Part 2
 - <div className='img-preview' style={{ minHeight: '200px', overflow: 'hidden' }}></div>
 - img-preview is set inside the Cropper as preview
-- we need to create anew type definition file for cropper
+- we need to create a new type definition file for cropper
 - npm uninstall @types/react-cropper - as we defined our definition file: react-cropper.d.ts
 - use custom type definition file (d.ts) when there are no types for a library 
-- use: declare module 'react-cropper'  in react-cropper.d.ts
-- npm install @types/cropperjs@1.1.5 - as there is no types for cropperjs
+- use: declare module 'react-cropper' in react-cropper.d.ts
+- npm install @types/cropperjs@1.1.5 - as there is no types for cropper.js
 - delete the added file and use: npm install @types/react-cropper as the new version resolved the type definition issue
 
 239. Adding the Photo Upload methods to the store
-- add a new requesttype to agent.ts - post Form
+- add a new request type to agent.ts - post Form
 - add uploadPhoto action to profile store
 
 240. Adding the photo upload functionality to the Profile component
@@ -84,12 +84,12 @@ Section 17: Photo Upload Part 2 - Client
 - add setMainPhoto to profile store. Also handle updating user photos. IsMain prop
 
 242. Isolating our loading indicators
-- Add photo.id as button name. Add target state to profilePhoto.tsx . Set the target in the onClick method of the button with e.currentTarget.name. 
+- Add photo.id as button name. Add target state to profilePhoto.tsx. Set the target in the onClick method of the button with e.currentTarget.name. 
 - the the target in the loading prop: loading={loading && target === photo.id}
 
 243. Adding Delete photo functionality
 - add deletePhoto action to profileStore
-- add the same (name, onclick, disabled, loading) props to the delete button
+- add the same (name, onClick, disabled, loading) props to the delete button
 
 244. Summary of section 17
 - adding a profile page

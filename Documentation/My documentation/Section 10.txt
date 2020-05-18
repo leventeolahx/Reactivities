@@ -10,24 +10,24 @@ Section 10: Error handling and validation
 - launch.json .NET Core Attach - for debugging the api
 - debug tab in vs code -> select .net code attach
 - run the debug by clicking on the green button and select the api.exe or dll
-- validations are stored in the ModaState while debugging
+- validations are stored in the ModalState while debugging
 - fluent validation acts as a middleware between our command and the handler
 
 123. Adding validation in the Api using Fluent Validation
 - quite common practice to use fluent validation when using MediatR
 - Add FluentValidation.AspNetCore to application project
-- add netcoreapp3.0 for all projects to can use fluent validation, because that package uses netcode app3
+- add netcoreapp3.0 for all projects to can use fluent validation, because that package uses netcoreapp3.0
 - dotnet restore
-- public class CommandValidation : AbstractValidator<Command> class and create a consturctor. There you can add RuleFor
--.AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>() - add this line to the startup project after addcontollers
-- we only need to specify one particular class because this method is goning to look for any validators and register them in our services
+- public class CommandValidation : AbstractValidator<Command> class and create a constructor. There you can add RuleFor
+-.AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>() - add this line to the startup project after addControllers
+- we only need to specify one particular class because this method is going to look for any validators and register them in our services
 
 143. Error handling concepts in our application
 - 2xx - ok, 3xx - not modified/ redirected, 4xx - client side error, 5xx - server side error
-- we have no access to the httpresponse in the application project
+- we have no access to the httpResponse in the application project
 - this case the only way to get out of a request from the application project to the api is to throw an exception with proper message
-- to have access to httpcontext and one way  to access this context is to create a exception handling middleware
-- ordering of middelware is important as aspcore executes the middlewares in the pipeline one after another
+- to have access to httpContext and one way to access this context is to create a exception handling middleware
+- ordering of middleware is important as aspCore executes the middleware in the pipeline one after another
 - when it comes to exception handling we need to call it early in the pipeline so that we can catch exceptions that occur in later stages of the pipeline
 
 125. Error handling strategy
@@ -38,25 +38,25 @@ Section 10: Error handling and validation
 - the other on is to use exception and stop the execution of the handler
 - and we are going to intercept the exception and turn that into an http response
 
-126. Creating a derivied Exception class for Rest exceptions
-- right now in developement mode we send back an exception page (startup.cs -> app.UserDeveloperExceptionPage)
-- api->properties->launchsettings.json -> api.aspnetcode_env -> to prod -> this changes the environmet to prodction
-- Create a new class which inherits from exception
-- add httpstauts code and error to the consturctor
+126. Creating a derived Exception class for Rest exceptions
+- right now in development mode we send back an exception page (startup.cs -> app.UserDeveloperExceptionPage)
+- api->properties->launchSettings.json -> api.aspnetcode_env -> to prod -> this changes the environment to production
+- Create a new class which inherits from exception (RestException)
+- add httpStatus code and error to the constructor
 
 127. Adding Error handling middleware
-- aspnetcore middlerware
-- create an errorhandlinmiddleware class
-- add a `RequestDeletegate next` param to the constructor
-- add an Invoke method with a httpContext param and add `await _next(context)` - if it's okay then it will execute the next meddleware
+- aspnetcore middleware
+- create an errorHandlingMiddleware class
+- add a `RequestDelegate next` param to the constructor
+- add an Invoke method with a httpContext param and add `await _next(context)` - if it's okay then it will execute the next middleware
 - if the invoke fails then we catch it in the exception and handling every type of ex in a new method (RestException, Exception atm)
 - JsonSerializer is included in v2 of .net framework
-- add values to context.response : statuscode, contentType, response.Write
+- add values to context.response : statusCode, contentType, response.Write
 - context.Response.StatusCode = (int)re.Code;                     
 - context.Response.ContentType = "application/json";
 - await context.Response.WriteAsync(JsonSerializer.Serialize(new {errors}));
 
-128. Using our Error hanling middleware
+128. Using our Error handling middleware
 - add the middleware to the startup at the beginning of the config method: app.UseMiddleware<ErrorHandlingMiddleware>();
 
 129. Using Axios interceptors to catch errors
@@ -75,14 +75,14 @@ Section 10: Error handling and validation
 - import { Router } from 'react-router-dom'
 - import { createBrowserHistory } from 'history' in index. tsx and refactor BrowseRouter
 - export const history = createBrowserHistory(); - and add this history to the Router
-- use the newly created history const in agetnt.ts
+- use the newly created history const in agent.ts
 
 132. Handling and individual GUID on a get request
 - if (status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')) - check for guid validation
 
 133. Adding toast notifications
  - npm install react-toastify
-- import 'react-toastify/dist/ReactToastify.min.css'; - index.sx
+- import 'react-toastify/dist/ReactToastify.min.css'; - index.tsx
 - <ToastContainer position='bottom-right'/> - to app.tsx
 
 134. Handling network errors in Axios

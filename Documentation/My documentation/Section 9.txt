@@ -5,8 +5,8 @@ Section 9: Adding some style
 110. Styling the activity list
 - Create a new activity list item and code copy the item from list to this new cmp
 
-111. Grouping activitiesby date
-- Object.entries(sortedActivities) - creates a key/value object out of an enumbealbes
+111. Grouping activities by date
+- Object.entries(sortedActivities) - creates a key/value object out of an enumerable 
 -         return Object.entries(sortedActivities.reduce((activities, activity) => {
             const date = activity.date.split('T')[0];
             activities[date] = activities[date] ? [...activities[date], activity] : [activity];
@@ -15,20 +15,20 @@ Section 9: Adding some style
 - created a store method which returns a key/values array which is a group by of activities by date
 
 112. Styling the activity list items
-- refactored the activity list item to use item.goup and added them in a correct segment to look nice
+- refactored the activity list item to use item.group and added them in a correct segment to look nice
 
 113. Creating the Activity details page
-- deviding the detial page into two columns and add the new layout in these columns
+- divide the detail page into two columns and add the new layout in these columns
 
 114. Styling the activity detail page header
-- Create details header from code snippet that the author defined.  Then add somem extra styling.
+- Create details header from code snippet that the author defined. Then add some extra styling.
 - basic segment is without styling
 
 115. Styling the activity detailed info
 - Adding the detail cmp from snippet and displaying the activity
 
-116. Styling the Activity Detaile Chat and Sidebar cmp
-- add the semantic ui cmp to activity detial chat and sidebar
+116. Styling the Activity Detail Chat and Sidebar cmp
+- add the semantic ui cmp to activity detail chat and sidebar
 
 117. Styling te activity Form
 

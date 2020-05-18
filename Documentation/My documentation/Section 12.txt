@@ -2,13 +2,13 @@ Section 12: ASP.NET Core Identity
 152. Section 12 introduction
 
 153. Introduction to ASP.NET Core Identity
-- supports login stored in Idientity
+- supports login stored in Identity
 - supports external providers (fb, google)
 - comes with default user stores
 - UserManager
 - SignInManager
 - password + hash + salt
-- same password are stored differnetly (due to the hash)
+- same password are stored differently (due to the hash)
 
 154. Adding the Identity User Entity
 - Create AppUser entity and derive it from IdentityUser
@@ -20,11 +20,11 @@ Section 12: ASP.NET Core Identity
 - dotnet ef migrations add "AddIdentity" -p Persistence/ -s API/
 - ctrl+shift+p sql lite
 
-155. Configuring Identityin our startup class
+155. Configuring Identity in our startup class
 - add AspNetCore.Identity.UI to api fro nuget
 - Add to the api startup: var builder = services.AddIdentityCore<AppUser>();
-- by ext the startup conf. services  our app has the ability to create and manage users via user manager serv. which we get from IdentityCore
-- we added a sign in manager so we can use it to sign our user in useing usernam and password
+- by extending the startup conf. services our app has the ability to create and manage users via user manager service which we get from IdentityCore
+- we added a sign in manager so we can use it to sign our user using username and password
 
 156. Seeding users to the database
 - use UserManager to access to UserStore and seed date in seeData method
@@ -36,27 +36,27 @@ Section 12: ASP.NET Core Identity
 
 158. Adding a Base API controller
 - protected prop is available in the current class and any class which derives from current
-- protected IMediator Mediator => _mediator ?? (_mediator =  HttpContext.RequestServices.GetService<IMediator>())  - get med from services
+- protected IMediator Mediator => _mediator ?? (_mediator =  HttpContext.RequestServices.GetService<IMediator>())  - get mediatoR from services
 
 159. Adding a User API controller
 - simply add user api which derives from base
 
 160. Adding a User object
-- we are going to generate a token so the user can send this token with every request to auth himsef
+- we are going to generate a token so the user can send this token with every request to auth himself
 - added a user class which is going to be returned to the user and does not contain sensitive data
 
-161. JSON Web Tokents introduction
+161. JSON Web Tokens introduction
 - Jwt is made from three parts : header, payload and a signature
 - the token is sent back to the user separated by 3 period
 - the token is sent every time when the user makes a request to the server
 - first stores the algorithm and the type of token
-- payload is the date stored inside the JWT - sometimes is reffered as claims of JWT
-- this token can be decoded be anybody so do not use sensiteve data in the payload
+- payload is the date stored inside the JWT - sometimes is referred as claims of JWT
+- this token can be decoded be anybody so do not use sensitive data in the payload
 - keep the token as small as possible
-- the third part of the token is the signiture token and this is what our server users to verify that this token is valid and hasn't been modified or manipulated
-- send the JWT whit the request in the header: Authorization: Bearer <JWT> 
-- we are going to create an infrastucture project which generate the token
-- we are gonna give the infrastucture proj a dependency on our app and our api is going to have a dependency on our infrastructure proj
+- the third part of the token is the 'signature' token and this is what our server users to verify that this token is valid and hasn't been modified or manipulated
+- send the JWT with the request in the header: Authorization: Bearer <JWT> 
+- we are going to create an infrastructure project which generate the token
+- we are gonna give the infrastructure proj a dependency on our app and our api is going to have a dependency on our infrastructure proj
 
 162. Adding the Infrastructure project
 - dotnet new classlib -n Infrastructure
@@ -65,7 +65,7 @@ Section 12: ASP.NET Core Identity
 - dotnet add reference ../Infrastructure/ - in api proj
 
 163. Adding the JWT Generator interface and class
-- we add the CreateToken method as a service inside our startup class so that we can inject the IJwtGenarator into our application
+- we add the CreateToken method as a service inside our startup class so that we can inject the IJwtGenerator into our application
 - services.AddScoped<IJwtGenerator, JwtGenerator>();
 
 164. Generating a JWT Token
@@ -86,18 +86,18 @@ Section 12: ASP.NET Core Identity
 
 167. Dotnet user secrets
 - dotnet user-secrets
-- user-secretes is only available in developement 
+- user-secretes is only available in development 
 - dotnet user-secrets init -p API/
 - dotnet user-secrets set TokenKey "super secret key" -p API/ - is stored in dev machine, so if you move the proj to another machine you will not have access and you will need to recreate
-- swap the hardcoded key to :var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
+- swap the hard-coded key to: var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
 
-168. Adding an authorisation policy
+168. Adding an authorization policy
 - add services.AddMvc  to startup.cs
 - [AllowAnonymous] for login
 
 169. Adding a Register Handler
 - create a Register MediatR handler
-- in the handler we checked the existing email and username then created a new user via usermanager and return the User object with a token
+- in the handler we checked the existing email and username then created a new user via UserManager and return the User object with a token
 
 170. Testing user registration
 
@@ -111,7 +111,7 @@ Section 12: ASP.NET Core Identity
 - var username = _httpContextAccessor.HttpContext.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
 - services.AddScoped<IUserAccessor, UserAccessor>(); - get the username out of the token (in the proper method: GetCurrentUserName)
 
-173. Getting the curtrently logged in user
+173. Getting the currently logged in user
 - Create CurrentUser class to application proj. Same MediatR handler
 - inject: public Handler(UserManager<AppUser> userManager, IJwtGenerator jwtGenerator, IUserAccessor userAccessor)
 - create a new api endpoint and call current user mediatr

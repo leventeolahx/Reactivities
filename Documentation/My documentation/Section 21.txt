@@ -11,13 +11,13 @@ Section 21: Paging, Sorting and Filtering
 276. Refactoring the Activity store list method for paging
 - add totalPages computed method
 - add setPage action method to activityStore
-- extend agent.ts activitis list method with page and limit params
-- add limit and page to loadactivities to activity store
+- extend agent.ts activities list method with page and limit params
+- add limit and page to loadActivities to activity store
 - add IActivitiesEnvelope interface
 - update activities and activityCount from activitiesEnvelope
 
 277. Adding vertical paging to our activity dashboard
-- add loading next const to activity dashboard for loading button  indicator
+- add loading next const to activity dashboard for loading button indicator
 - add handleGetNext method to set the next page and get the next activities from server
 - add a button and disable it when there is no more pages
 
@@ -47,9 +47,9 @@ Section 21: Paging, Sorting and Filtering
 - add predicates and handlers to ActivityFilter items
 
 283. Adding User Activities filter in the API
-- create a new UserActivityDto to proflie folder in app project
+- create a new UserActivityDto to profile folder in app project
 - also add ListActivities to the same folder
-- add GetUserActivites api endpoint
+- add GetUserActivities api endpoint
 
 284. Adding User Activities filter in the client
 - adjust agent.ts

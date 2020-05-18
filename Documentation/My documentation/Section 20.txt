@@ -4,7 +4,7 @@ Section 20: Following/Follower feature
 
 261. Adding the UserFollower Entity
 - create userFollowing entity
-- add:  b.HasOne(o => o.Observer).WithMany(f => f.Followings).HasForeignKey(o => o.ObserverId).OnDelete(DeleteBehavior.Restrict);
+- add: b.HasOne(o => o.Observer).WithMany(f => f.Followings).HasForeignKey(o => o.ObserverId).OnDelete(DeleteBehavior.Restrict);
 
 262. Adding the Add Follower handler
 - Create add following handler in app proj
@@ -21,7 +21,7 @@ Section 20: Following/Follower feature
 - add additionally following data to the profile cs
 - write ReadProfile method to return information about a user and following infos
 - add services.AddScoped<IProfileReader, ProfileReader>(); to startup so that we can inject to the other classes
-- rewrite profile detail class to use Profilereader
+- rewrite profile detail class to use ProfileReader
 
 266. Getting a List of Followings for a user
 - Add a new list query handler to followers folder in application proj
@@ -30,38 +30,38 @@ Section 20: Following/Follower feature
 267. Adding a Custom value resolver for AutoMapper
 - add Following prop to AttendeeDTO
 - Create a new followingResolver.cs to Activities folder and inherit: public class FollowingResolver : IValueResolver<UserActivity, AttendeeDto, bool> { }
-- implement the interface, and inject datacontext and useraccessor via constructor
-- in the resolve method check the the source APpUserId and return true if it's following
+- implement the interface, and inject dataContext and userAccessor via constructor
+- in the resolve method check the the source AppUserId and return true if it's following
 - .ForMember(d => d.Following, o => o.MapFrom<FollowingResolver>()) - use the custom mapping resolver
 
 268. Adding the UI components to show followed users
 - add the new dto props to the frontend as well
 - add a border to activityListItemAttendees
-- add all the following functionallity to frontend
+- add all the following functionality to frontend
 
-269. Adding the Follow / Unfollow methods
-- add follow and unfollow to user agent
-- add follow and unfollow actions to profile store
+269. Adding the Follow / UnFollow methods
+- add follow and unFollow to user agent
+- add follow and unFollow actions to profile store
 
-270. Adding the Follow / Unfollow UI components
-- bring follow and unfollow to profile page and parse down to profile header
-- hook up follow unfollow button
+270. Adding the Follow / UnFollow UI components
+- bring follow and unFollow to profile page and parse down to profile header
+- hook up follow unFollow button
 
 271. Getting a list of followings from the API
 - Create two new file to feature/profile folder: followings and card tsx
 - add code from snippet (only skeleton)
-- add listFollowings to agent ts
+- add listFollowings to agent.ts
 - add loadFollowings profile store action method
-- bing loadfollowers to profileFollowings and load it in the use effect then loop over them
+- bring loadFollowers to profileFollowings and load it in the use effect then loop over them
 
 272. Using MobX reactions to get followers or followings on tab change
-- we can move useeffect from profileFollowing to profileStore and use a reaction instead
+- we can move useEffect from profileFollowing to profileStore and use a reaction instead
 - add activeTab observable and setActiveTab action to profile store
 - parse SetActiveTab method to profileContent and use it in onTabChange method:onTabChange={(e, data) => setActiveTab(data.activeIndex)}
 - use reaction in profileStore constructor: reaction(
             () => this.activeTab,
-            activeTab => {.....}) - whenever the this.activeTab chages thisreaction is called
+            activeTab => {.....}) - whenever the this.activeTab changes this reaction is called
 
 273. Section 20 summary
-- implenting a follow feature
+- implanting a follow feature
 - self referencing many to many relationships

@@ -26,7 +26,7 @@ namespace Application.Profiles
             if (user == null)
                 throw new RestException(HttpStatusCode.NotFound, new { User = "Not found" });
 
-            var currentUer = await _dataContext.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUserName());
+            var currentUser = await _dataContext.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUserName());
 
             var profile = new Profile
             {
@@ -38,7 +38,7 @@ namespace Application.Profiles
                 FollowersCount = user.Followers.Count(),
                 FollowingCount = user.Followings.Count(),
             };
-            if (currentUer.Followings.Any(x => x.TargetId == user.Id))
+            if (currentUser.Followings.Any(x => x.TargetId == user.Id))
                 profile.IsFollowed = true;
 
             return profile;
